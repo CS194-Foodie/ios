@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Parse
+import Bolts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +18,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Initialize Parse using plist file credentials for the appropriate Parse app
+        let parseCredentialsPath = NSBundle.mainBundle().pathForResource("ParseCredentials", ofType: "plist")!
+        let parseCredentialsDict:Dictionary<String, String> = NSDictionary(contentsOfFile: parseCredentialsPath)!["Prod"]! as! Dictionary<String, String>
+        
+        let parseConfiguration = ParseClientConfiguration {
+            $0.applicationId = parseCredentialsDict["appID"]!
+            $0.server = parseCredentialsDict["serverURL"]!
+        }
+        
+        Parse.initializeWithConfiguration(parseConfiguration)
+
         return true
     }
 
