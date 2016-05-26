@@ -72,7 +72,8 @@ class LogInViewController: PFLogInViewController, PFLogInViewControllerDelegate 
     func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
         
         // Show a loading indicator while we set up user
-        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.labelText = "Logging in..."
         
         // Get user info for this Facebook user
         FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id,name"]).startWithCompletionHandler { (connection:FBSDKGraphRequestConnection!, result:AnyObject!, error:NSError!) in
@@ -90,15 +91,14 @@ class LogInViewController: PFLogInViewController, PFLogInViewControllerDelegate 
                     if let e = error {
                         print("Error saving user's Facebook info: \(e.localizedDescription)")
                     } else {
+                        
+                        // Go to the welcome screen
                         MBProgressHUD.hideHUDForView(self.view, animated: true)
                         self.performSegueWithIdentifier("welcome", sender: nil)
                     }
                 })
             }
         }
-        
-        
-        
     }
     
     /* Handles login errors */

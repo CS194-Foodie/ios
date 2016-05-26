@@ -115,8 +115,8 @@
                                                 </constraints>
                                                 <variation key="default">
                                                     <mask key="constraints">
-                                                        <exclude reference="Ebp-cM-APA"/>
                                                         <exclude reference="DT5-kr-caS"/>
+                                                        <exclude reference="Ebp-cM-APA"/>
                                                     </mask>
                                                 </variation>
                                             </imageView>
@@ -167,8 +167,8 @@
                                                 </constraints>
                                                 <variation key="default">
                                                     <mask key="constraints">
-                                                        <exclude reference="z6u-yl-5gk"/>
                                                         <exclude reference="Pdc-rR-gsq"/>
+                                                        <exclude reference="z6u-yl-5gk"/>
                                                     </mask>
                                                 </variation>
                                             </imageView>

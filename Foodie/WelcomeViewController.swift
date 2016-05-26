@@ -11,9 +11,10 @@ import UIKit
 class WelcomeViewController: UIViewController {
 
     @IBAction func getStarted(sender: UIButton) {
-        let appDelegate = UIApplication.sharedApplication().delegate!
-        let logInStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        appDelegate.window!!.rootViewController = logInStoryboard.instantiateInitialViewController()
+        let onboardingStoryboard = UIStoryboard(name: "Onboarding", bundle: nil)
+        let firstVC = onboardingStoryboard.instantiateViewControllerWithIdentifier("StartScreen") as! OnboardingFoodPreferencesViewController
+        firstVC.cancelButtonVisible = false
+        self.navigationController?.pushViewController(firstVC, animated: true)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
