@@ -10,6 +10,7 @@ target 'Foodie' do
 	pod 'FBSDKShareKit'
 	pod 'ParseFacebookUtilsV4'
 	pod 'ParseUI'
+	pod 'MBProgressHUD', '~> 0.9.2'
 end
 
 target 'FoodieTests' do

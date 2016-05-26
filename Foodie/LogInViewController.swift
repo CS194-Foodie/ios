@@ -8,6 +8,8 @@
 
 import UIKit
 import ParseUI
+import FBSDKCoreKit
+import MBProgressHUD
 
 class LogInViewController: PFLogInViewController, PFLogInViewControllerDelegate {
     
@@ -68,7 +70,35 @@ class LogInViewController: PFLogInViewController, PFLogInViewControllerDelegate 
     
     /* Handles login success */
     func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
-        self.performSegueWithIdentifier("welcome", sender: nil)
+        
+        // Show a loading indicator while we set up user
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
+        // Get user info for this Facebook user
+        FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id,name"]).startWithCompletionHandler { (connection:FBSDKGraphRequestConnection!, result:AnyObject!, error:NSError!) in
+            
+            if let e = error {
+                print("Error fetching Facebook info: \(e.localizedDescription)")
+            } else {
+                
+                // Save the user's name and facebook ID in the Parse user object
+                let userInfo = result as! [String:String]
+                user.setObject(userInfo["name"]!, forKey: "name")
+                user.setObject(userInfo["id"]!, forKey: "facebookUserID")
+                
+                user.saveInBackgroundWithBlock({ (success:Bool, error:NSError?) in
+                    if let e = error {
+                        print("Error saving user's Facebook info: \(e.localizedDescription)")
+                    } else {
+                        MBProgressHUD.hideHUDForView(self.view, animated: true)
+                        self.performSegueWithIdentifier("welcome", sender: nil)
+                    }
+                })
+            }
+        }
+        
+        
+        
     }
     
     /* Handles login errors */
