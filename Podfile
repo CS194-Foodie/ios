@@ -5,6 +5,11 @@ use_frameworks!
 
 target 'Foodie' do
 	pod 'Parse'
+	pod 'FBSDKCoreKit'
+	pod 'FBSDKLoginKit'
+	pod 'FBSDKShareKit'
+	pod 'ParseFacebookUtilsV4'
+	pod 'ParseUI'
 end
 
 target 'FoodieTests' do
@@ -12,6 +17,11 @@ target 'FoodieTests' do
 end
 
 target 'FoodieUITests' do
-
+       pod 'Parse'
+       pod 'FBSDKCoreKit'
+       pod 'FBSDKLoginKit'
+       pod 'FBSDKShareKit'
+       pod 'ParseFacebookUtilsV4'
+       pod 'ParseUI'
 end
 

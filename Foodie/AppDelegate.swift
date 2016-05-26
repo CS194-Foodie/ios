@@ -9,6 +9,9 @@
 import UIKit
 import Parse
 import Bolts
+import FBSDKCoreKit
+import FBSDKLoginKit
+import ParseFacebookUtilsV4
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,9 +31,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             $0.server = parseCredentialsDict["serverURL"]!
         }
         
+        // Set up Parse and Facebook
         Parse.initializeWithConfiguration(parseConfiguration)
+        FBSDKApplicationDelegate.sharedInstance().application(application,
+                                                              didFinishLaunchingWithOptions: launchOptions)
+        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
+                
+        // Display the correct initial screen
+        // http://stackoverflow.com/questions/19962276/best-practices-for-storyboard-login-screen-handling-clearing-of-data-upon-logou
+        
+        if let _ = PFUser.currentUser() {
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            self.window?.rootViewController = mainStoryboard.instantiateInitialViewController()
+        } else {
+            let logInStoryboard = UIStoryboard(name: "LogIn", bundle: nil)
+            let logInNavVC = logInStoryboard.instantiateInitialViewController()
+            self.window?.rootViewController = logInNavVC
+        }
 
         return true
+    }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return FBSDKApplicationDelegate.sharedInstance().application(application,
+                                                                     openURL: url,
+                                                                     sourceApplication: sourceApplication,
+                                                                     annotation: annotation);
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -49,6 +75,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(application: UIApplication) {
