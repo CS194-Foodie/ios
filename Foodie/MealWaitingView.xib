@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MealWaitingView" customModule="Foodie" customModuleProvider="target">
+            <connections>
+                <outlet property="centerView" destination="NH3-ZC-pA5" id="6cI-cq-nef"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="sjP-5X-qwZ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NH3-ZC-pA5">
+                    <rect key="frame" x="0.0" y="128" width="600" height="344"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Meal planning in progress..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="j53-7Y-udh">
+                            <rect key="frame" x="8" y="8" width="584" height="55"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="46"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We'll keep you posted!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kTM-tW-ifq">
+                            <rect key="frame" x="8" y="71" width="584" height="24"/>
+                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="j53-7Y-udh" firstAttribute="leading" secondItem="NH3-ZC-pA5" secondAttribute="leading" constant="8" id="7IR-jQ-obg"/>
+                        <constraint firstItem="kTM-tW-ifq" firstAttribute="top" secondItem="j53-7Y-udh" secondAttribute="bottom" constant="8" id="84a-Kf-Mvv"/>
+                        <constraint firstItem="kTM-tW-ifq" firstAttribute="leading" secondItem="NH3-ZC-pA5" secondAttribute="leading" constant="8" id="GXY-SQ-m8S"/>
+                        <constraint firstItem="j53-7Y-udh" firstAttribute="top" secondItem="NH3-ZC-pA5" secondAttribute="top" constant="8" id="Je0-5x-bnr"/>
+                        <constraint firstItem="j53-7Y-udh" firstAttribute="centerX" secondItem="NH3-ZC-pA5" secondAttribute="centerX" id="KMU-6R-1AL"/>
+                        <constraint firstAttribute="height" constant="344" id="MAY-T4-t1T"/>
+                        <constraint firstAttribute="trailing" secondItem="kTM-tW-ifq" secondAttribute="trailing" constant="8" id="cf2-2I-e3q"/>
+                        <constraint firstItem="kTM-tW-ifq" firstAttribute="centerX" secondItem="NH3-ZC-pA5" secondAttribute="centerX" id="gsC-UE-z65"/>
+                        <constraint firstAttribute="trailing" secondItem="j53-7Y-udh" secondAttribute="trailing" constant="8" id="otx-WE-0R4"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="KMU-6R-1AL"/>
+                            <exclude reference="gsC-UE-z65"/>
+                        </mask>
+                    </variation>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="NH3-ZC-pA5" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="2pV-vX-iJB"/>
+                <constraint firstAttribute="trailing" secondItem="NH3-ZC-pA5" secondAttribute="trailing" id="hee-Ok-vrb"/>
+                <constraint firstItem="NH3-ZC-pA5" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ike-uL-Too"/>
+                <constraint firstItem="NH3-ZC-pA5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jbc-Vd-ns0"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

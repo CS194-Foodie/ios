@@ -30,6 +30,7 @@ PODS:
     - Bolts/Tasks (~> 1.3)
     - Parse (~> 1.9)
   - SocketRocket (0.5.1)
+  - SwiftGifOrigin (1.5.3)
 
 DEPENDENCIES:
   - ActionSheetPicker-3.0
@@ -41,6 +42,7 @@ DEPENDENCIES:
   - ParseFacebookUtilsV4
   - ParseLiveQuery
   - ParseUI
+  - SwiftGifOrigin
 
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: 8312778b6815578e6a86d630fbcf31dc94c534e7
@@ -55,7 +57,8 @@ SPEC CHECKSUMS:
   ParseLiveQuery: d0eb2528cdc5e3e2f836741b0a6db828c7e41307
   ParseUI: af2eba584799da4a9fbdac0e178662d7438b502e
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
+  SwiftGifOrigin: 893ebcceabe215a00b607328b5322b4e228347e5
 
-PODFILE CHECKSUM: cc149e14a0121dab78646231027f8dd0ca4d72f0
+PODFILE CHECKSUM: d41f838242bafc73f7bcfd41531b2c2e64e5f4f1
 
 COCOAPODS: 1.0.0

@@ -85,8 +85,9 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
     func displayViewForUserStatus(statusDict:NSDictionary) -> BFTask {
         
         var task = BFTask(result: nil)
+        let status = statusDict["status"] as! String
         
-        if statusDict["status"] as! String == "FREE" {
+        if status == "FREE" {
             
             // Load the Parse Config variable for max guests allowed
             task = task.continueWithSuccessBlock { (task:BFTask) -> AnyObject? in
@@ -112,8 +113,21 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
                 
                 return nil
             }
-        } else {
-            print("Not free")
+            
+        } else if status == "WAITING" {
+            
+            task.continueWithBlock { (task:BFTask) -> AnyObject? in
+                
+                // Add the waiting view
+                dispatch_async(dispatch_get_main_queue()) {
+                    let waitingView = MealWaitingView(frame: self.view.frame)
+                    self.userView = waitingView
+                    self.view.addSubview(self.userView!)
+                    (self.userView as! MealWaitingView).startLoadingAnimation()
+                }
+                
+                return nil
+            }
         }
         
         return task
