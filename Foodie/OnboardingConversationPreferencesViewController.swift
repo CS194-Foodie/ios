@@ -10,7 +10,23 @@ import UIKit
 import Parse
 import MBProgressHUD
 
-class OnboardingConversationPreferencesViewController: OnboardingViewController {
+class OnboardingConversationPreferencesViewController: OnboardingPreferencesListViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+        self.preferenceOptions = ["Sports", "Art", "Music", "Technology", "Shopping", "Nature", "Cooking", "Games", "Fashion", "Writing",
+                    "Movies", "Photography", "Politics"]
+        if let conversationPreferences = self.userPreferences.conversationPreferences {
+            self.selectedPreferences = Set<String>(conversationPreferences)
+        }
+    }
+    
+    override func userPreferencesDidChange() {
+        super.userPreferencesDidChange()
+        self.userPreferences.conversationPreferences = Array<String>(self.selectedPreferences)
+    }
     
     /* Triggered when the save button is tapped.  Shows a HUD loading indicator,
      * saves the user's inputted preferences to Parse, removes the HUD on completion,

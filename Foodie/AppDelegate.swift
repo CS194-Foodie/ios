@@ -115,10 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if userInfo["FoodieNotificationType"] as! String == "RSVP" {
             
-            // Check if the user is currently busy
-            let eventStore = EKEventStore()
-            
-            
+            //TODO: use eventkit to check if the user is currently busy
             
             let notif = UILocalNotification()
             notif.alertBody = "Alert body 2"
