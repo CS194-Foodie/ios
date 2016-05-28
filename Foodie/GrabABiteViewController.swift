@@ -42,7 +42,7 @@ import MBProgressHUD
  */
 class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
     
-    var userView: UIView! = nil
+    var userView: UIView?
 
     override func viewDidAppear(animated:Bool) {
         super.viewDidAppear(animated)
@@ -54,7 +54,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
         let params = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!]
         PFCloud.callFunctionInBackground("getUserStatus", withParameters: params).continueWithSuccessBlock { (task:BFTask) -> AnyObject? in
             
-            let resultsDict = task.result as! [String:String]
+            let resultsDict = task.result as! NSDictionary
             print("getUserStatus response: \(resultsDict)")
             return self.displayViewForUserStatus(resultsDict)
             
@@ -65,7 +65,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
                 hud.hide(true)
                 
                 if let e = task.error {
-                    self.displayAlertWithTitle("Error", message: "Could not load view - \(e.localizedDescription)")
+                    self.displayAlertWithTitle("Error", message: "Could not load view - \(e)")
                 }
             }
             
@@ -75,18 +75,18 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        self.userView.removeFromSuperview()
+        self.userView?.removeFromSuperview()
     }
     
     /* Display the appropriate view (schedule view, waiting view, restaurant
      * info view, etc.) depending on whether the user is free or already
      * scheduled.
      */
-    func displayViewForUserStatus(statusDict:[String:String]) -> BFTask {
+    func displayViewForUserStatus(statusDict:NSDictionary) -> BFTask {
         
         var task = BFTask(result: nil)
         
-        if statusDict["status"] == "FREE" {
+        if statusDict["status"] as! String == "FREE" {
             
             // Load the Parse Config variable for max guests allowed
             task = task.continueWithSuccessBlock { (task:BFTask) -> AnyObject? in
@@ -106,7 +106,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
                         let schedulerView = MealSchedulerView(frame: self.view.frame, maxNumGuests: config["MAX_NUM_GUESTS"] as! Int)
                         schedulerView.delegate = self
                         self.userView = schedulerView
-                        self.view.addSubview(self.userView)
+                        self.view.addSubview(self.userView!)
                     }
                 }
                 
@@ -168,6 +168,15 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
         
         // Make a new event object for the server to fill in
         let newEvent = PFObject(className: "Event")
+        newEvent.setObject([String](), forKey: "goingUsers")
+        newEvent.setObject([String](), forKey: "pendingUsers")
+        newEvent.setObject([String](), forKey: "unavailableUsers")
+        newEvent.setObject(false, forKey: "isComplete")
+        newEvent.setObject(0, forKey: "cuisineIndex")
+        newEvent.setObject(PFUser.currentUser()!.objectId!, forKey: "creatorId")
+        newEvent.setObject([String](), forKey: "cuisines")
+        newEvent.setObject([String](), forKey: "invitedUsers")
+        
         newEvent.saveInBackground().continueWithSuccessBlock { (task:BFTask) -> AnyObject? in
             
             // Call matchUser, passing along our session token, the ID of the event object we just saved,
