@@ -8,8 +8,11 @@
 
 import UIKit
 
-/* Delegate protocol to be notified of user interaction with this view 
+/* PROTOCOL: MealSchedulerViewDelegate
+ * ------------------------------------
+ * Delegate protocol to be notified of user interaction with this view
  * (including modifying # guests and scheduling event)
+ * ------------------------------------
  */
 protocol MealSchedulerViewDelegate : class {
     
@@ -23,11 +26,22 @@ protocol MealSchedulerViewDelegate : class {
     func mealSchedulerViewScheduleButtonPressed(mealSchedulerView:MealSchedulerView)
 }
 
+/* CLASS: MealSchedulerView
+ * ----------------------------
+ * View that lets the user schedule a new meal with friends.  Displays
+ * the name of the next meal coming up (either "lunch" or "dinner"),
+ * and allows the user to select how many guests they'd like to invite.
+ * Then, they can tap the "Lets Eat!" button to attempt to schedule the event.
+ * 
+ * This view has a delegate to allow another object to respond to user interactions
+ * with this view.
+ */
 class MealSchedulerView: UIView {
     
     /* CONSTANTS */
-    let maxNumGuests = 2
+    var maxNumGuests = 3
     let minNumGuests = 1
+    let scheduleButtonCornerRadius:CGFloat = 25
     
     // (24 hour clock)
     let breakfastCutoffHour = 11 // 11AM
@@ -61,6 +75,12 @@ class MealSchedulerView: UIView {
         initSubviews()
     }
     
+    init(frame: CGRect, maxNumGuests:Int) {
+        self.maxNumGuests = maxNumGuests
+        super.init(frame:frame)
+        initSubviews()
+    }
+    
     /* Initializes views, displays the default # guests, and figures out what meal is next */
     func initSubviews() {
         let nib = UINib(nibName: "MealSchedulerView", bundle: nil)
@@ -84,7 +104,7 @@ class MealSchedulerView: UIView {
         }
         
         // Round the "Let's Eat" button's corners
-        letsEatButtonView.layer.cornerRadius = 25
+        letsEatButtonView.layer.cornerRadius = scheduleButtonCornerRadius
         letsEatButtonView.layer.masksToBounds = true
         
         addSubview(contentView)
