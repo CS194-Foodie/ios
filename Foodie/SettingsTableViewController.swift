@@ -11,16 +11,26 @@ import Parse
 import MBProgressHUD
 
 class SettingsTableViewController: UITableViewController {
+    
+    @IBOutlet weak var nameLabel:UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        nameLabel.text = PFUser.currentUser()?.objectForKey("name") as? String
+    }
 
     /* Detect when either the preferences or logout button is tapped */
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch (indexPath.row) {
-        case 0:
-            showPreferences()
-        case 1:
-            logOut()
-        default:
-            print("Error: unknown index \(indexPath.row)")
+        if (indexPath.section == 1) {
+            switch (indexPath.row) {
+            case 0:
+                showPreferences()
+            case 1:
+                logOut()
+            default:
+                print("Error: unknown index \(indexPath.row)")
+            }
         }
     }
     
@@ -38,8 +48,10 @@ class SettingsTableViewController: UITableViewController {
         hud.labelText = "Logging Out..."
         
         PFUser.logOutInBackgroundWithBlock { (error:NSError?) in
+            
+            hud.hide(true)
+            
             if let e = error {
-                hud.hide(true)
                 
                 let alert = UIAlertController(title: "Error", message: "Could not log out - \(e.localizedDescription)", preferredStyle: .Alert)
                 let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
@@ -47,8 +59,6 @@ class SettingsTableViewController: UITableViewController {
                 
                 self.presentViewController(alert, animated: true, completion: nil)
             } else {
-                hud.hide(true)
-                
                 let logInStoryboard = UIStoryboard(name: "LogIn", bundle: nil)
                 let logInVC = logInStoryboard.instantiateInitialViewController()!
                 logInVC.modalTransitionStyle = .FlipHorizontal

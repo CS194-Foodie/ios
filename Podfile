@@ -11,6 +11,7 @@ target 'Foodie' do
 	pod 'ParseFacebookUtilsV4'
 	pod 'ParseUI'
 	pod 'MBProgressHUD', '~> 0.9.2'
+	pod 'ActionSheetPicker-3.0'
 end
 
 target 'FoodieTests' do
