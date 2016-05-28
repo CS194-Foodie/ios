@@ -43,12 +43,24 @@ import MBProgressHUD
 class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, MealRSVPViewDelegate {
     
     var userView: UIView?
+    var relevantEvent: PFObject?
 
     override func viewDidAppear(animated:Bool) {
         super.viewDidAppear(animated)
 
-        // Get the status of this user (busy, free, etc.) since the screen we
-        // display depends on whether they're already roped into an event
+        checkUserStatus()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.userView?.removeFromSuperview()
+        self.relevantEvent = nil
+        MBProgressHUD.hideAllHUDsForView(self.tabBarController?.view, animated: true)
+    }
+    
+    // Get the status of this user (busy, free, etc.) since the screen we
+    // display depends on whether they're already roped into an event
+    func checkUserStatus() {
         let hud = MBProgressHUD.showHUDAddedTo(self.tabBarController?.view, animated: true)
         
         let params = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!]
@@ -58,24 +70,19 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
             print("getUserStatus response: \(resultsDict)")
             return self.displayViewForUserStatus(resultsDict)
             
-        }.continueWithBlock { (task:BFTask) -> AnyObject? in
-            
-            // On the main thread, stop the loading indicator and display an alert if needed
-            dispatch_async(dispatch_get_main_queue()) {
-                hud.hide(true)
+            }.continueWithBlock { (task:BFTask) -> AnyObject? in
                 
-                if let e = task.error {
-                    self.displayAlertWithTitle("Error", message: "Could not load view - \(e)")
+                // On the main thread, stop the loading indicator and display an alert if needed
+                dispatch_async(dispatch_get_main_queue()) {
+                    hud.hide(true)
+                    
+                    if let e = task.error {
+                        self.displayAlertWithTitle("Error", message: "Could not load view - \(e)", handler: nil)
+                    }
                 }
-            }
-            
-            return nil
+                
+                return nil
         }
-    }
-    
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.userView?.removeFromSuperview()
     }
     
     /* Display the appropriate view (schedule view, waiting view, restaurant
@@ -97,7 +104,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 if let e = task.error {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlertWithTitle("Error",
-                            message: "Could not load scheduling view - \(e.localizedDescription)")
+                            message: "Could not load scheduling view - \(e.localizedDescription)", handler: nil)
                     }
                 } else {
                     let config = task.result as! PFConfig
@@ -118,6 +125,8 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
             
             task.continueWithBlock { (task:BFTask) -> AnyObject? in
                 
+                self.relevantEvent = statusDict["event"] as? PFObject
+                
                 // Add the waiting view
                 dispatch_async(dispatch_get_main_queue()) {
                     let waitingView = MealWaitingView(frame: self.view.frame)
@@ -131,6 +140,8 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         } else if status == "INVITED" {
             
             task.continueWithBlock { (task:BFTask) -> AnyObject? in
+                
+                self.relevantEvent = statusDict["event"] as? PFObject
                 
                 // Add the RSVP view
                 dispatch_async(dispatch_get_main_queue()) {
@@ -148,10 +159,12 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
     }
     
     /* Displays a UIAlertController with the given title and message, and an OK button. */
-    func displayAlertWithTitle(title:String, message:String) {
+    func displayAlertWithTitle(title:String, message:String, handler: (() -> Void)?) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        let defaultAction = UIAlertAction(title: "OK", style: .Default) { (_:UIAlertAction) in
+            handler?()
+        }
         alert.addAction(defaultAction)
         
         self.presentViewController(alert, animated: true, completion: nil)
@@ -164,7 +177,46 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
      * calls the userRSVP Cloud Function and passes along the response.
      */
     func mealRSVPView(mealRSVPView: MealRSVPView, didRSVPWithResponse response: Bool) {
-        displayAlertWithTitle("RSVP Recorded", message: response ? "YES!" : "NO :(")
+        
+        // Show a loading indicator while we RSVP
+        let hud = MBProgressHUD.showHUDAddedTo(self.tabBarController?.view, animated: true)
+        hud.labelText = "Sending..."
+
+        let params:[NSObject:AnyObject] = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!,
+                                           "canGo": response, "eventId": self.relevantEvent!.objectId!]
+        PFCloud.callFunctionInBackground("userRSVP", withParameters: params).continueWithBlock { (task:BFTask) -> AnyObject? in
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                if let e = task.error {
+                    // On error, display an error message
+                    hud.mode = .Text
+                    hud.labelText = "Error: \(e)"
+                    hud.hide(true, afterDelay: 1.0)
+                } else {
+                    
+                    // On success, show a success message, hide the HUD, and go to the main screen
+                    hud.mode = .CustomView
+                    let image = UIImage(named: "Checkmark")?.imageWithRenderingMode(.AlwaysTemplate)
+                    hud.customView = UIImageView(image: image)
+                    hud.square = true
+                    hud.labelText = "Sent!"
+                    hud.hide(true, afterDelay: 0.5)
+                    self.delay(1.0) {
+                        self.checkUserStatus()
+                    }
+                }
+            }
+            
+            return nil
+        }
+    }
+    
+    /* Executes the given block after the given delay, in seconds
+     * Thanks to http://stackoverflow.com/questions/24034544/dispatch-after-gcd-in-swift/24318861#24318861
+     */
+    func delay(delay:Double, block:()->()) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), block)
     }
     
     
@@ -235,9 +287,12 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 hud.hide(true)
                 
                 if let error = task.error {
-                    self.displayAlertWithTitle("Error", message: "Could not schedule event - \(error.localizedDescription)")
+                    self.displayAlertWithTitle("Error", message: "Could not schedule event - \(error.localizedDescription)", handler: nil)
                 } else {
-                    self.displayAlertWithTitle("Success!", message: "We'll let you know when something's scheduled!  EventId: \(newEvent.objectId!)")
+                    // Success - display the waiting screen
+                    self.displayAlertWithTitle("Success!", message: "We'll let you know when something's scheduled!  EventId: \(newEvent.objectId!)") {
+                        self.checkUserStatus()
+                    }
                 }
             }
                 
