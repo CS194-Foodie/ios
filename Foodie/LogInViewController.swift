@@ -93,7 +93,8 @@ class LogInViewController: PFLogInViewController, PFLogInViewControllerDelegate 
                     } else {
                         
                         // Go to the welcome screen
-                        MBProgressHUD.hideHUDForView(self.view, animated: true)
+                        hud.hide(true)
+                        FoodieLocationManager.sharedInstance.uploadCurrentLocation()
                         self.performSegueWithIdentifier("welcome", sender: nil)
                     }
                 })

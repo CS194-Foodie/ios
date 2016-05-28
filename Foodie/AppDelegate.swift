@@ -12,12 +12,12 @@ import Bolts
 import FBSDKCoreKit
 import FBSDKLoginKit
 import ParseFacebookUtilsV4
+import EventKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let locationManager = CLLocationManager()
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         defaults.registerDefaults(["serverName": "Prod"])
         defaults.synchronize()
         let serverName = defaults.stringForKey("serverName")!
-        print(serverName)
         
         let parseCredentialsDict:Dictionary<String, String> = NSDictionary(contentsOfFile: parseCredentialsPath)![serverName]! as! Dictionary<String, String>
         
@@ -46,18 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
         
         setUpNotifications(application)
-        
-        // If the user is logged in, upload their location
-        if let _ = PFUser.currentUser() {
-            locationManager.delegate = self
-            
-            if CLLocationManager.authorizationStatus() == .NotDetermined {
-                locationManager.requestWhenInUseAuthorization()
-            } else {
-                locationManager.requestLocation()
-            }
-        }
-        
+        FoodieLocationManager.sharedInstance.uploadCurrentLocation()
                 
         // Display the correct initial screen
         // http://stackoverflow.com/questions/19962276/best-practices-for-storyboard-login-screen-handling-clearing-of-data-upon-logou
@@ -73,42 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
         return true
     }
-    
-    
-    //MARK: Core Location
-    
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == .AuthorizedWhenInUse {
-            manager.requestLocation()
-        }
-    }
-    
-    /* When we get a location update, upload the location info to Parse under the current user */
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        if let user = PFUser.currentUser() {
-            let point = PFGeoPoint(location: locations.last)
-            user.setObject(point, forKey: "userLocation")
-            
-            // Reverse geocode the location to get the city and state
-            let geocoder = CLGeocoder()
-            geocoder.reverseGeocodeLocation(locations.last!) { (placemarks:[CLPlacemark]?, error:NSError?) in
-                if let placemarks = placemarks, placemark = placemarks.first {
-                    let city = placemark.locality!
-                    let state = placemark.administrativeArea!
-                    print("City = \(city), State = \(state)")
-                    user.setObject("\(city), \(state)", forKey: "userLocationString")
-                }
-                
-                user.saveInBackground()
-            }
-        }
-    }
-    
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print("Location manager error: \(error.localizedDescription)")
-    }
-    
+
     
     //MARK: Notifications
     
@@ -160,11 +113,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         PFPush.handlePush(userInfo)
         
-        let notif = UILocalNotification()
-        notif.alertBody = "Alert body 2"
-        notif.alertTitle = "Alert title"
-        notif.alertAction = "Alert action"
-        application.presentLocalNotificationNow(notif)
+        if userInfo["FoodieNotificationType"] as! String == "RSVP" {
+            
+            // Check if the user is currently busy
+            let eventStore = EKEventStore()
+            
+            
+            
+            let notif = UILocalNotification()
+            notif.alertBody = "Alert body 2"
+            notif.alertTitle = "Alert title"
+            notif.alertAction = "Alert action"
+            application.presentLocalNotificationNow(notif)
+        }
+        
         completionHandler(.NoData)
     }
     
