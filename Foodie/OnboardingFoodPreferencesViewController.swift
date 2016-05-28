@@ -8,6 +8,18 @@
 
 import UIKit
 
+/* CLASS: OnboardingFoodPreferencesViewController
+ * -----------------------------------------------
+ * View controller for letting the user select their favorite cuisines.  Subclasses
+ * OnboardingPreferencesListViewController to display a table of many cuisines to choose.
+ * When the user changes their cuisine preferences, we store the changes in our userPreferences
+ * object.
+ *
+ * Since this is the first screen in the onboarding flow, there is an optional cancel button
+ * that can be displayed in the upper left to modally exit from onboarding.  This is typically
+ * invisible during login, but visible when entered from settings.
+ * -----------------------------------------------
+ */
 class OnboardingFoodPreferencesViewController: OnboardingPreferencesListViewController {
     
     // Visible or invisible cancel button and modally dismisses
@@ -31,13 +43,11 @@ class OnboardingFoodPreferencesViewController: OnboardingPreferencesListViewCont
         // Do any additional setup after loading the view.
         cancelButton.hidden = !cancelButtonVisible
         self.preferenceOptions = ["American", "Chinese", "Thai", "Mexican", "Indian", "Mediterranean", "Japanese", "Greek", "Italian"]
-        if let foodPreferences = self.userPreferences.foodPreferences {
-            self.selectedPreferences = Set<String>(foodPreferences)
-        }
+        self.selectedPreferences = self.userPreferences.foodPreferences
     }
     
     override func userPreferencesDidChange() {
         super.userPreferencesDidChange()
-        self.userPreferences.foodPreferences = Array<String>(self.selectedPreferences)
+        self.userPreferences.foodPreferences = self.selectedPreferences
     }
 }

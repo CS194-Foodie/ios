@@ -11,7 +11,35 @@ import Parse
 import ActionSheetPicker_3_0
 import MBProgressHUD
 
-
+/* CLASS: GrabABiteViewController
+ * --------------------------------
+ * Main app screen, letting the user either schedule an event for their
+ * next meal, or view the status of currently pending (or planned) events.
+ * 
+ * After appearing, this view controller calls the getUserStatus Cloud Function to determine
+ * whether the user is currently roped into any Foodie events (either ones they have planned,
+ * or ones they are joining).  What is displayed on this screen depends on the results of this
+ * Cloud Function.  If:
+ *
+ *          user is FREE:
+ *              We display a MealSchedulerView, letting the user plan a new meal event.
+ *              This view lets the user configure the # guests, and submit the event.
+ *              When the user taps the # guests to change it, we pop up a modal ActionSheetPicker.
+ *              When the user taps the submit button, we send event info to matchUser.
+ *
+ *          user is ATTENDING (finalized event):
+ *              We display a MealEventView, which displays all information about the
+ *              user's upcoming event.
+ *          
+ *          user is WAITING:
+ *              We display a MealWaitingView, letting the user know that the event they are
+ *              a part of is still being figured out.
+ *
+ *          user is INVITED:
+ *              We display a MealRSVPView, letting the user respond to their invitation.
+ *          
+ * --------------------------------
+ */
 class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
     
     var userView: UIView! = nil

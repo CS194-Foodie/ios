@@ -5,17 +5,23 @@
 //  Created by Nick Troccoli on 5/28/16.
 //  Copyright © 2016 NJC. All rights reserved.
 //
-/* A class to handle Core Location queries for the user's current location, and uploading
- * the location info to Parse.  This class has a singleton instance which you can call
- * uploadCurrentLocation() on to upload the user's current location to Parse.  This
- * will include both the lat/lon (as a GeoPoint in the currentLocation field) and the
- * city/state (as a String in the currentLocationString field).
- */
 
 import Foundation
 import CoreLocation
 import Parse
 
+/* CLASS: FoodieLocationManager
+ * -----------------------------
+ * A class to handle Core Location queries for the user's current location, and uploading
+ * the location info to Parse.  This class has a singleton instance which you can call
+ * uploadCurrentLocation() on to upload the user's current location to Parse.  This
+ * will include both the lat/lon (as a GeoPoint in the currentLocation field) and the
+ * city/state (as a String in the currentLocationString field).
+ *
+ * Note: calling uploadCurrentLocation() may trigger a popup requesting permission to
+ * access the user's location if this is the first time the app has done so.
+ * -----------------------------
+ */
 class FoodieLocationManager:NSObject, CLLocationManagerDelegate {
 
     // Singleton

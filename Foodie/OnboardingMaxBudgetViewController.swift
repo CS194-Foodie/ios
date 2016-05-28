@@ -8,6 +8,14 @@
 
 import UIKit
 
+/* CLASS: OnboardingMaxBudgetViewController
+ * ------------------------------------------
+ * View Controller to let the user input their max budget.  The current max
+ * is displayed onscreen, with a stepper below to let the user increment or
+ * decrement it.  Whenever the max is changed, our user preferences object
+ * is updated.
+ * ------------------------------------------
+ */
 class OnboardingMaxBudgetViewController: OnboardingViewController {
     
     // Label displaying the dollar amount of the user's max budget, and corresponding stepper
@@ -29,11 +37,7 @@ class OnboardingMaxBudgetViewController: OnboardingViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        if let max = userPreferences.maxBudget {
-            self.maxBudget = max
-        } else {
-            self.maxBudget = 15
-        }
+        self.maxBudget = userPreferences.maxBudget
     }
     
     @IBAction func changeMaxBudget(sender:UIStepper) {

@@ -8,6 +8,15 @@
 
 import UIKit
 
+/* CLASS: OnboardingMaxTravelDistanceViewController
+ * -------------------------------------------------
+ * View controller for letting the user input their max travel distance.
+ * We do this by displaying a slider ranging from min to max possible max
+ * distance, and updating a label displaying the user's current choice as they
+ * change the slider.  Whenever the slider is moved, we update our user preferences
+ * object.
+ * -------------------------------------------------
+ */
 class OnboardingMaxTravelDistanceViewController: OnboardingViewController {
     
     @IBOutlet weak var maxTravelDistanceLabel:UILabel!
@@ -28,11 +37,7 @@ class OnboardingMaxTravelDistanceViewController: OnboardingViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        if let max = userPreferences.maxTravelDistance {
-            self.maxTravelDistance = max
-        } else {
-            self.maxTravelDistance = 10
-        }
+        self.maxTravelDistance = userPreferences.maxTravelDistance
     }
     
     @IBAction func changeMaxTravelDistance(sender:UISlider) {

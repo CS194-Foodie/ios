@@ -8,6 +8,13 @@
 
 import UIKit
 
+/* CLASS: WelcomeViewController
+ * -------------------------------
+ * Simple view controller to display an overview of Foodie.  Displays
+ * a "Get Started" button that segues the user to the start of the onboarding flow
+ * to input their preferences.
+ * -------------------------------
+ */
 class WelcomeViewController: UIViewController {
 
     @IBAction func getStarted(sender: UIButton) {

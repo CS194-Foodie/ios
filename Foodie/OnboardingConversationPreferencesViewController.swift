@@ -10,6 +10,18 @@ import UIKit
 import Parse
 import MBProgressHUD
 
+/* CLASS: OnboardingConversationPreferencesViewController
+ * -------------------------------------------------------
+ * View controller for letting the user select their favorite conversation topics.  Subclasses
+ * OnboardingPreferencesListViewController to display a table of many topics to choose.
+ * When the user changes their conversation preferences, we store the changes in our userPreferences
+ * object.
+ *
+ * Since this is the last onboarding screen, this view controller also handles exiting onboarding
+ * and transitioning to the main screen.  When the save button in the upper right is tapped,
+ * we tell our user preferences object to save itself to Parse, and then segue to the main screen.
+ * -----------------------------------------------
+ */
 class OnboardingConversationPreferencesViewController: OnboardingPreferencesListViewController {
     
     override func viewDidLoad() {
@@ -18,14 +30,12 @@ class OnboardingConversationPreferencesViewController: OnboardingPreferencesList
         // Do any additional setup after loading the view.
         self.preferenceOptions = ["Sports", "Art", "Music", "Technology", "Shopping", "Nature", "Cooking", "Games", "Fashion", "Writing",
                     "Movies", "Photography", "Politics"]
-        if let conversationPreferences = self.userPreferences.conversationPreferences {
-            self.selectedPreferences = Set<String>(conversationPreferences)
-        }
+        self.selectedPreferences = self.userPreferences.conversationPreferences
     }
     
     override func userPreferencesDidChange() {
         super.userPreferencesDidChange()
-        self.userPreferences.conversationPreferences = Array<String>(self.selectedPreferences)
+        self.userPreferences.conversationPreferences = self.selectedPreferences
     }
     
     /* Triggered when the save button is tapped.  Shows a HUD loading indicator,

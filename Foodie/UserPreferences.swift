@@ -9,28 +9,33 @@
 import Foundation
 import Parse
 
+/* CLASS: UserPreferences
+ * -------------------------
+ * A class representing the different preferences a user can enter during onboarding, including:
+ *
+ *      foodPreferences - a set of strings containing the user's preferred cuisines
+ *      maxBudget - the max the user is willing to spend per meal
+ *      maxTravelDistance - the max the user is willing to travel (in mi) per meal
+ *      conversationPreferences - a set of strings containing the user's favorite conversation topics
+ *
+ * This object also has a method to upload the current user preferences to the current user's record 
+ * (if any) in Parse.
+ * -------------------------
+ */
 class UserPreferences {
-    var foodPreferences: [String]?
-    var maxBudget: Int?
-    var maxTravelDistance: Int?
-    var conversationPreferences: [String]?
+    var foodPreferences:Set<String> = []
+    var maxBudget = 15
+    var maxTravelDistance = 10
+    var conversationPreferences:Set<String> = []
     
     // Saves all four values to the current user object, and executes the passed-in block upon finishing.
     func saveInBackgroundWithBlock(block:PFBooleanResultBlock) {
-        setUserField("foodPreferences", value: foodPreferences, fallback: [])
-        setUserField("maxBudget", value: maxBudget, fallback: 0)
-        setUserField("maxTravelDistance", value: maxTravelDistance, fallback: 0)
-        setUserField("conversationPreferences", value: conversationPreferences, fallback: [])
-        PFUser.currentUser()?.saveInBackgroundWithBlock(block)
-    }
-    
-    // Sets the field in the current user object with the given fieldName to the given value if it
-    // exists, or the fallback value otherwise.
-    func setUserField(fieldName:String, value:AnyObject?, fallback:AnyObject) {
-        if let val = value {
-            PFUser.currentUser()?.setObject(val, forKey: fieldName)
-        } else {
-            PFUser.currentUser()?.setObject(fallback, forKey: fieldName)
+        if let currUser = PFUser.currentUser() {
+            currUser.setObject(Array<String>(foodPreferences), forKey: "foodPreferences")
+            currUser.setObject(maxBudget, forKey: "maxBudget")
+            currUser.setObject(maxTravelDistance, forKey: "maxTravelDistance")
+            currUser.setObject(Array<String>(conversationPreferences), forKey: "conversationPreferences")
+            currUser.saveInBackgroundWithBlock(block)
         }
     }
 }

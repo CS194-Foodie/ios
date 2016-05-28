@@ -11,6 +11,13 @@ import ParseUI
 import FBSDKCoreKit
 import MBProgressHUD
 
+/* CLASS: LogInViewController
+ * --------------------------------
+ * Subclass of PFLogInViewController that displays the Foodie logo, background image,
+ * and only a Facebook login button.  On success, uploads the user's current location
+ * to Parse and segues to the Welcome screen / onboarding flow.
+ * --------------------------------
+ */
 class LogInViewController: PFLogInViewController, PFLogInViewControllerDelegate {
     
     var backgroundImage: UIImageView!

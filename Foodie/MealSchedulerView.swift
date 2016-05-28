@@ -34,7 +34,8 @@ protocol MealSchedulerViewDelegate : class {
  * Then, they can tap the "Lets Eat!" button to attempt to schedule the event.
  * 
  * This view has a delegate to allow another object to respond to user interactions
- * with this view.
+ * with this view, including changing the # guests and tapping the schedule button.
+ * ----------------------------
  */
 class MealSchedulerView: UIView {
     
@@ -55,6 +56,7 @@ class MealSchedulerView: UIView {
     
     weak var delegate: MealSchedulerViewDelegate?
     
+    // Number of guests invited, in addition to the creator
     var numGuests: Int {
         get {
             return Int(numGuestsButton.titleLabel!.text!)!

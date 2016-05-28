@@ -10,6 +10,28 @@ import UIKit
 import Parse
 import MBProgressHUD
 
+/* CLASS: SettingsTableViewController
+ * -----------------------------------
+ * View controller for displaying the settings screen.  Consists of a static tableview with
+ * the following 2 sections:
+ *
+ *      Information:
+ *              Row 1: user's name
+ *              Row 2: app version
+ *              Row 3: Segmented control to switch between Prod and Staging
+ *
+ *      Other Settings:
+ *              Row 1: Button to change Foodie preferences
+ *              Row 2: Button to log out
+ *
+ * When the user wants to change their Foodie preferences, this view controller modally
+ * presents the onboarding flow that they see upon login, but with the initial cancel
+ * button visible so they can exit if they want.
+ *
+ * When the user changes the server we connect to, we display a dialog stating that
+ * the user must kill and relaunch the app to change servers.
+ * ------------------------------------
+ */
 class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var nameLabel:UILabel!
