@@ -64,22 +64,15 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="w2e-wT-DId">
-                                <rect key="frame" x="288" y="180" width="25" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="cKx-uS-ZBQ" firstAttribute="top" secondItem="fQ9-Xu-NOR" secondAttribute="bottom" constant="8" id="5Dm-Yl-YOH"/>
                             <constraint firstItem="bPl-ff-9lO" firstAttribute="centerY" secondItem="zY2-e8-xA5" secondAttribute="centerY" id="AQO-xb-E0T"/>
-                            <constraint firstItem="w2e-wT-DId" firstAttribute="top" secondItem="Az1-Xr-kE8" secondAttribute="bottom" constant="58" id="EFX-c4-Ild"/>
                             <constraint firstItem="bPl-ff-9lO" firstAttribute="centerX" secondItem="ICE-GL-p1e" secondAttribute="centerX" id="IZY-7A-IX9"/>
                             <constraint firstItem="zY2-e8-xA5" firstAttribute="top" secondItem="fQ9-Xu-NOR" secondAttribute="bottom" constant="8" id="Ulq-ya-fvI"/>
                             <constraint firstItem="Az1-Xr-kE8" firstAttribute="top" secondItem="bPl-ff-9lO" secondAttribute="bottom" constant="32" id="a3B-JI-3Bs"/>
                             <constraint firstAttribute="trailing" secondItem="cKx-uS-ZBQ" secondAttribute="trailing" constant="20" id="ccy-iz-6Zg"/>
-                            <constraint firstItem="w2e-wT-DId" firstAttribute="centerX" secondItem="ICE-GL-p1e" secondAttribute="centerX" id="e3A-4T-Sgn"/>
                             <constraint firstItem="zY2-e8-xA5" firstAttribute="leading" secondItem="ICE-GL-p1e" secondAttribute="leading" constant="20" id="gZ5-NG-d6X"/>
                             <constraint firstItem="Az1-Xr-kE8" firstAttribute="centerX" secondItem="ICE-GL-p1e" secondAttribute="centerX" id="vdu-ua-6LT"/>
                         </constraints>

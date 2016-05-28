@@ -159,7 +159,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
                 if let error = task.error {
                     self.displayAlertWithTitle("Error", message: "Could not schedule event - \(error.localizedDescription)")
                 } else {
-                    self.displayAlertWithTitle("Success!", message: "We'll let you know when something's scheduled!")
+                    self.displayAlertWithTitle("Success!", message: "We'll let you know when something's scheduled!  EventId: \(newEvent.objectId!)")
                 }
             }
                 

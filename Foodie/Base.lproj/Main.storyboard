@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Grab a Bite-->
@@ -83,12 +84,45 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="WRr-eS-pVs">
+                                        <rect key="frame" x="0.0" y="202" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WRr-eS-pVs" id="LiR-Av-lbt">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Server" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e9m-49-oRO">
+                                                    <rect key="frame" x="16" y="11" width="50" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="Ict-x2-OiZ">
+                                                    <rect key="frame" x="461" y="7" width="123" height="29"/>
+                                                    <segments>
+                                                        <segment title="Prod"/>
+                                                        <segment title="Staging"/>
+                                                    </segments>
+                                                    <color key="tintColor" red="0.96078431369999995" green="0.56862745100000001" blue="0.13725490200000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <connections>
+                                                        <action selector="changeServer:" destination="43C-dF-zd0" eventType="valueChanged" id="yNy-ap-zJh"/>
+                                                    </connections>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="e9m-49-oRO" firstAttribute="leading" secondItem="LiR-Av-lbt" secondAttribute="leadingMargin" constant="8" id="21t-UP-Edt"/>
+                                                <constraint firstItem="Ict-x2-OiZ" firstAttribute="centerY" secondItem="LiR-Av-lbt" secondAttribute="centerY" id="FmF-hN-eFp"/>
+                                                <constraint firstItem="e9m-49-oRO" firstAttribute="centerY" secondItem="LiR-Av-lbt" secondAttribute="centerY" id="K5v-kT-JiN"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Ict-x2-OiZ" secondAttribute="trailing" constant="8" id="nHx-UN-FY7"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="Other Settings" id="qU6-kE-sFz">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="xdJ-0Y-Vam">
-                                        <rect key="frame" x="0.0" y="253" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="297" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xdJ-0Y-Vam" id="S0S-qM-V89">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -108,7 +142,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="5Um-cn-XL3">
-                                        <rect key="frame" x="0.0" y="297" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="341" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Um-cn-XL3" id="mG0-cz-adP">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -138,6 +172,7 @@
                     <tabBarItem key="tabBarItem" title="Settings" image="SettingsIcon" id="KcN-Rt-SYD"/>
                     <connections>
                         <outlet property="nameLabel" destination="OBN-vw-w6C" id="PrQ-XT-dJw"/>
+                        <outlet property="serverSegmentedControl" destination="Ict-x2-OiZ" id="xhG-fQ-5W6"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Xz-Ma-0vK" userLabel="First Responder" sceneMemberID="firstResponder"/>
