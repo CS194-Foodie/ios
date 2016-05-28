@@ -40,7 +40,7 @@ import MBProgressHUD
  *          
  * --------------------------------
  */
-class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
+class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, MealRSVPViewDelegate {
     
     var userView: UIView?
 
@@ -128,6 +128,20 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
                 
                 return nil
             }
+        } else if status == "INVITED" {
+            
+            task.continueWithBlock { (task:BFTask) -> AnyObject? in
+                
+                // Add the RSVP view
+                dispatch_async(dispatch_get_main_queue()) {
+                    let rsvpView = MealRSVPView(frame: self.view.frame)
+                    rsvpView.delegate = self
+                    self.userView = rsvpView
+                    self.view.addSubview(self.userView!)
+                }
+                
+                return nil
+            }
         }
         
         return task
@@ -142,6 +156,19 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate {
         
         self.presentViewController(alert, animated: true, completion: nil)
     }
+    
+    
+    //MARK: MealRSVPViewDelegate
+    
+    /* Called when the user RSVPs either Yes or No to the shown event.  This method
+     * calls the userRSVP Cloud Function and passes along the response.
+     */
+    func mealRSVPView(mealRSVPView: MealRSVPView, didRSVPWithResponse response: Bool) {
+        displayAlertWithTitle("RSVP Recorded", message: response ? "YES!" : "NO :(")
+    }
+    
+    
+    //MARK: MealSchedulerViewDelegate
     
     /* Called when the scheduler view's # guests button is tapped, meaning the user wants to change it.
      * This method pops up a picker view to let the user select the # of guests (between the given min and max).
