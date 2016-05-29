@@ -96,6 +96,14 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         var task = BFTask(result: nil)
         let status = statusDict["status"] as! String
         
+        // Remove the previous view
+        if let oldView = userView {
+            dispatch_async(dispatch_get_main_queue()) {
+                oldView.removeFromSuperview()
+            }
+            userView = nil
+        }
+        
         if status == "FREE" {
             
             // Load the Parse Config variable for max guests allowed
@@ -156,6 +164,9 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 
                 return nil
             }
+        } else {
+            //TODO: Finalized event
+            
         }
         
         return task
@@ -167,10 +178,10 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
     /* Called when the user RSVPs either Yes or No to the shown event.  This method
      * calls the userRSVP Cloud Function and passes along the response.
      */
-    func mealRSVPView(mealRSVPView: MealRSVPView, didRSVPWithResponse response: Bool) {
+    func mealRSVPView(mealRSVPView: MealRSVPView, didRSVPWithResponse canGo: Bool) {
         
         // Store in NSUserDefaults if they declined
-        if !response {
+        if !canGo {
             NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: FoodieStringConstants.MostRecentRSVPNoKey)
             NSUserDefaults.standardUserDefaults().synchronize()
         }
@@ -180,7 +191,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         hud.labelText = "Sending..."
 
         let params:[NSObject:AnyObject] = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!,
-                                           "canGo": response, "eventId": self.relevantEvent!.objectId!]
+                                           "canGo": canGo, "eventId": self.relevantEvent!.objectId!]
         print("Calling userRSVP with params: \(params)")
         PFCloud.callFunctionInBackground("userRSVP", withParameters: params).continueWithBlock { (task:BFTask) -> AnyObject? in
             

@@ -120,16 +120,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if didDeclineRecentRSVP() || hasCalendarEventNow() {
                 let params:[NSObject:AnyObject] = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!,
                                                    "canGo": false, "eventId": userInfo["eventId"] as! String]
-                print("Calling userRSVP with params: \(params)")
-                PFCloud.callFunctionInBackground("userRSVP", withParameters: params).continueWithBlock { (task:BFTask) -> AnyObject? in
-                    
-                    if let e = task.error {
+                print("Automatically calling userRSVP with params: \(params)")
+                PFCloud.callFunctionInBackground("userRSVP", withParameters: params) { (_:AnyObject?, error:NSError?) in
+                    if let e = error {
                         print("Error - could not decline RSVP - \(e.localizedDescription)")
+                        completionHandler(.Failed)
                     } else {
                         print("Successfully declined RSVP")
+                        completionHandler(.NewData)
                     }
-                    
-                    return nil
                 }
             } else {
                 // Post a notification asking the user to RSVP
@@ -139,11 +138,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 notif.category = FoodieStringConstants.RSVPNotificationCategory
                 notif.userInfo = userInfo
                 application.presentLocalNotificationNow(notif)
+                
+                completionHandler(.NewData)
             }
 
         }
-        
-        completionHandler(.NoData)
     }
     
     /* Returns true if the user declined an RSVP within the last hour */
@@ -194,7 +193,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let params:[NSObject:AnyObject] = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!,
                                                "canGo": response, "eventId": notification.userInfo!["eventId"] as! String]
             print("Calling userRSVP with params: \(params)")
-            PFCloud.callFunctionInBackground("userRSVP", withParameters: params, block: { (result:AnyObject?, error:NSError?) in
+            PFCloud.callFunctionInBackground("userRSVP", withParameters: params) { (_:AnyObject?, error:NSError?) in
                 if let e = error {
                     print("Error - could not respond to RSVP - \(e.localizedDescription)")
                 } else {
@@ -202,7 +201,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 
                 completionHandler()
-            })
+            }
         } else {
             completionHandler()
         }
