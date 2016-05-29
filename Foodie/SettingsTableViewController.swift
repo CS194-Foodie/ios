@@ -22,7 +22,9 @@ import MBProgressHUD
  *
  *      Other Settings:
  *              Row 1: Button to change Foodie preferences
- *              Row 2: Button to log out
+ *              Row 2: Button to go to app Settings page (in Settings app)
+ *              Row 3: Button to clear NSUserDefaults
+ *              Row 4: Button to log out
  *
  * When the user wants to change their Foodie preferences, this view controller modally
  * presents the onboarding flow that they see upon login, but with the initial cancel
@@ -43,7 +45,7 @@ class SettingsTableViewController: UITableViewController {
         nameLabel.text = PFUser.currentUser()?.objectForKey("name") as? String
         
         // Get the current server name
-        let serverName = NSUserDefaults.standardUserDefaults().stringForKey("serverName")!
+        let serverName = NSUserDefaults.standardUserDefaults().stringForKey(FoodieStringConstants.ParseServerNameKey)!
         if serverName == "Prod" {
             serverSegmentedControl.selectedSegmentIndex = 0
         } else {
@@ -58,8 +60,18 @@ class SettingsTableViewController: UITableViewController {
             case 0:
                 showPreferences()
             case 1:
+                tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+            case 2:
+                tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
+                NSUserDefaults.standardUserDefaults().synchronize()
+                UIAlertController.displayAlertWithTitle("Success", message: "NSUserDefaults cleared!",
+                                                        presentingViewController:self, okHandler:nil)
+            case 3:
                 logOut()
             default:
+                tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 print("Error: unknown index \(indexPath.row)")
             }
         }
@@ -98,22 +110,14 @@ class SettingsTableViewController: UITableViewController {
     
     /* Triggered when the user taps/changes the segmented control to switch servers */
     @IBAction func changeServer(sender:UISegmentedControl) {
-        let oldServerName = NSUserDefaults.standardUserDefaults().stringForKey("serverName")!
+        let oldServerName = NSUserDefaults.standardUserDefaults().stringForKey(FoodieStringConstants.ParseServerNameKey)!
         let newServerName = sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)
         
         if oldServerName != newServerName {
-            NSUserDefaults.standardUserDefaults().setObject(newServerName, forKey: "serverName")
+            NSUserDefaults.standardUserDefaults().setObject(newServerName, forKey: FoodieStringConstants.ParseServerNameKey)
             NSUserDefaults.standardUserDefaults().synchronize()
-            displayAlertWithTitle("Restart Required", message: "Please kill and relaunch the app to switch servers")
+            UIAlertController.displayAlertWithTitle("Restart Required", message: "Please kill and relaunch the app to switch servers",
+                                                    presentingViewController: self, okHandler: nil)
         }
-    }
-    
-    /* Displays a UIAlertController with the given title and message, and an OK button. */
-    func displayAlertWithTitle(title:String, message:String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
-        alert.addAction(defaultAction)
-        
-        self.presentViewController(alert, animated: true, completion: nil)
     }
 }

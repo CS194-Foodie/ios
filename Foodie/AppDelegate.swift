@@ -21,15 +21,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
         
         // Initialize Parse using plist file credentials for the appropriate Parse app
         let parseCredentialsPath = NSBundle.mainBundle().pathForResource("ParseCredentials", ofType: "plist")!
-        
+                
+        // Initialize NSUserDefaults (stores server name and most recent RSVP decline)
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.registerDefaults(["serverName": "Prod"])
+        defaults.registerDefaults([FoodieStringConstants.ParseServerNameKey: "Prod",
+            FoodieStringConstants.MostRecentRSVPNoKey: NSDate.distantPast()])
         defaults.synchronize()
-        let serverName = defaults.stringForKey("serverName")!
+        let serverName = defaults.stringForKey(FoodieStringConstants.ParseServerNameKey)!
         
         let parseCredentialsDict:Dictionary<String, String> = NSDictionary(contentsOfFile: parseCredentialsPath)![serverName]! as! Dictionary<String, String>
         
@@ -70,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Yes action for RSVP Notification
         let yesAction = UIMutableUserNotificationAction()
-        yesAction.identifier = "YES_IDENTIFIER"
+        yesAction.identifier = FoodieStringConstants.RSVPNotificationYesIdentifier
         yesAction.title = "Yes"
         yesAction.activationMode = .Background
         yesAction.destructive = false
@@ -78,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // No action for RSVP Notification
         let noAction = UIMutableUserNotificationAction()
-        noAction.identifier = "NO_IDENTIFIER"
+        noAction.identifier = FoodieStringConstants.RSVPNotificationNoIdentifier
         noAction.title = "No"
         noAction.activationMode = .Background
         noAction.destructive = false
@@ -86,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // RSVP Notification Category
         let rsvpCategory = UIMutableUserNotificationCategory()
-        rsvpCategory.identifier = "RSVP_CATEGORY"
+        rsvpCategory.identifier = FoodieStringConstants.RSVPNotificationCategory
         rsvpCategory.setActions([yesAction, noAction], forContext: .Default)
         rsvpCategory.setActions([yesAction, noAction], forContext: .Minimal)
         
@@ -115,31 +116,96 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if userInfo["FoodieNotificationType"] as! String == "RSVP" {
             
-            //TODO: use eventkit to check if the user is currently busy
-            
-            let notif = UILocalNotification()
-            notif.alertBody = "Alert body 2"
-            notif.alertTitle = "Alert title"
-            notif.alertAction = "Alert action"
-            application.presentLocalNotificationNow(notif)
+            // Decline the RSVP automatically
+            if didDeclineRecentRSVP() || hasCalendarEventNow() {
+                let params:[NSObject:AnyObject] = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!,
+                                                   "canGo": false, "eventId": userInfo["eventId"] as! String]
+                print("Calling userRSVP with params: \(params)")
+                PFCloud.callFunctionInBackground("userRSVP", withParameters: params).continueWithBlock { (task:BFTask) -> AnyObject? in
+                    
+                    if let e = task.error {
+                        print("Error - could not decline RSVP - \(e.localizedDescription)")
+                    } else {
+                        print("Successfully declined RSVP")
+                    }
+                    
+                    return nil
+                }
+            } else {
+                // Post a notification asking the user to RSVP
+                let notif = UILocalNotification()
+                notif.alertBody = "Do you want to grab a bite to eat?"
+                notif.alertTitle = "Foodie Invitation"
+                notif.category = FoodieStringConstants.RSVPNotificationCategory
+                notif.userInfo = userInfo
+                application.presentLocalNotificationNow(notif)
+            }
+
         }
         
         completionHandler(.NoData)
     }
     
-    func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [NSObject : AnyObject], completionHandler: () -> Void) {
+    /* Returns true if the user declined an RSVP within the last hour */
+    func didDeclineRecentRSVP() -> Bool {
+        let lastDeclineDate = NSUserDefaults.standardUserDefaults().objectForKey(FoodieStringConstants.MostRecentRSVPNoKey) as! NSDate
+        return NSDate().timeIntervalSinceDate(lastDeclineDate) / 60.0 < 60.0
+    }
+    
+    /* Returns true is the user has a calendar event right now */
+    func hasCalendarEventNow() -> Bool {
         
-        if let id = identifier where id == "YES_IDENTIFIER" {
-           let notif = UILocalNotification()
-            notif.alertBody = "Alert body"
-            notif.alertTitle = "Alert title"
-            notif.alertAction = "Alert action"
-            application.presentLocalNotificationNow(notif)
-        } else if let id = identifier where id == "NO_IDENTIFIER" {
+        // If we don't have calendar access, assume they're free
+        if EKEventStore.authorizationStatusForEntityType(.Event) != .Authorized {
+            return false
+        } else {
+            let store = EKEventStore()
+            
+            // 5 min ago
+            let startDate = NSDate(timeInterval: -60.0 * 5, sinceDate: NSDate())
+            
+            // 1 hour in the future
+            let endDate = NSDate(timeInterval: 60.0 * 60, sinceDate: NSDate())
+            
+            let predicate = store.predicateForEventsWithStartDate(startDate, endDate: endDate, calendars: nil)
+            return store.eventsMatchingPredicate(predicate).count > 0
+        }
+    }
+    
+    /* Triggered when an RSVP response button is tapped on our local RSVP notification.  Call our Parse Cloud
+     * RSVP function to pass along the response.
+     */
+    func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forLocalNotification notification: UILocalNotification, completionHandler: () -> Void) {
         
+        // Get the user's response
+        var rsvpResponse: Bool?
+        if let id = identifier where id == FoodieStringConstants.RSVPNotificationYesIdentifier {
+            rsvpResponse = true
+        } else if let id = identifier where id == FoodieStringConstants.RSVPNotificationNoIdentifier {
+            rsvpResponse = false
+            
+            // Don't bother ther user again for another hour
+            NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: FoodieStringConstants.MostRecentRSVPNoKey)
+            NSUserDefaults.standardUserDefaults().synchronize()
         }
         
-        completionHandler()
+        // Send to Parse
+        if let response = rsvpResponse {
+            let params:[NSObject:AnyObject] = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!,
+                                               "canGo": response, "eventId": notification.userInfo!["eventId"] as! String]
+            print("Calling userRSVP with params: \(params)")
+            PFCloud.callFunctionInBackground("userRSVP", withParameters: params, block: { (result:AnyObject?, error:NSError?) in
+                if let e = error {
+                    print("Error - could not respond to RSVP - \(e.localizedDescription)")
+                } else {
+                    print("Successfully RSVPed")
+                }
+                
+                completionHandler()
+            })
+        } else {
+            completionHandler()
+        }
     }
     
     

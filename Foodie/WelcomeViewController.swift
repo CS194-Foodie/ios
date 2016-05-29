@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import EventKit
 
 /* CLASS: WelcomeViewController
  * -------------------------------
@@ -18,11 +19,29 @@ import UIKit
 class WelcomeViewController: UIViewController {
 
     @IBAction func getStarted(sender: UIButton) {
+        
+        // Request calendar access
+        if EKEventStore.authorizationStatusForEntityType(.Event) == .NotDetermined {
+            
+            let store = EKEventStore()
+            store.requestAccessToEntityType(.Event, completion: { (granted:Bool, error:NSError?) in
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.segueToOnboarding()
+                }
+            })
+        } else {
+            segueToOnboarding()
+        }
+    }
+    
+    func segueToOnboarding() {
         let onboardingStoryboard = UIStoryboard(name: "Onboarding", bundle: nil)
         let firstVC = onboardingStoryboard.instantiateViewControllerWithIdentifier("StartScreen") as! OnboardingFoodPreferencesViewController
         firstVC.cancelButtonVisible = false
         self.navigationController?.pushViewController(firstVC, animated: true)
     }
+    
+    
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent

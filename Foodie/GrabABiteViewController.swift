@@ -64,6 +64,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         let hud = MBProgressHUD.showHUDAddedTo(self.tabBarController?.view, animated: true)
         
         let params = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!]
+        print("Calling getUserStatus with params: \(params)")
         PFCloud.callFunctionInBackground("getUserStatus", withParameters: params).continueWithSuccessBlock { (task:BFTask) -> AnyObject? in
             
             let resultsDict = task.result as! NSDictionary
@@ -77,7 +78,8 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                     hud.hide(true)
                     
                     if let e = task.error {
-                        self.displayAlertWithTitle("Error", message: "Could not load view - \(e)", handler: nil)
+                        UIAlertController.displayAlertWithTitle("Error", message: "Could not load view - \(e.localizedDescription)",
+                            presentingViewController:self, okHandler: nil)
                     }
                 }
                 
@@ -103,8 +105,9 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 
                 if let e = task.error {
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlertWithTitle("Error",
-                            message: "Could not load scheduling view - \(e.localizedDescription)", handler: nil)
+                        UIAlertController.displayAlertWithTitle("Error",
+                            message: "Could not load scheduling view - \(e.localizedDescription)",
+                            presentingViewController:self, okHandler: nil)
                     }
                 } else {
                     let config = task.result as! PFConfig
@@ -158,18 +161,6 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         return task
     }
     
-    /* Displays a UIAlertController with the given title and message, and an OK button. */
-    func displayAlertWithTitle(title:String, message:String, handler: (() -> Void)?) {
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let defaultAction = UIAlertAction(title: "OK", style: .Default) { (_:UIAlertAction) in
-            handler?()
-        }
-        alert.addAction(defaultAction)
-        
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
-    
     
     //MARK: MealRSVPViewDelegate
     
@@ -178,12 +169,19 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
      */
     func mealRSVPView(mealRSVPView: MealRSVPView, didRSVPWithResponse response: Bool) {
         
+        // Store in NSUserDefaults if they declined
+        if !response {
+            NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: FoodieStringConstants.MostRecentRSVPNoKey)
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+        
         // Show a loading indicator while we RSVP
         let hud = MBProgressHUD.showHUDAddedTo(self.tabBarController?.view, animated: true)
         hud.labelText = "Sending..."
 
         let params:[NSObject:AnyObject] = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!,
                                            "canGo": response, "eventId": self.relevantEvent!.objectId!]
+        print("Calling userRSVP with params: \(params)")
         PFCloud.callFunctionInBackground("userRSVP", withParameters: params).continueWithBlock { (task:BFTask) -> AnyObject? in
             
             dispatch_async(dispatch_get_main_queue()) {
@@ -191,7 +189,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 if let e = task.error {
                     // On error, display an error message
                     hud.mode = .Text
-                    hud.labelText = "Error: \(e)"
+                    hud.labelText = "Error: \(e.localizedDescription)"
                     hud.hide(true, afterDelay: 1.0)
                 } else {
                     
@@ -287,10 +285,12 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 hud.hide(true)
                 
                 if let error = task.error {
-                    self.displayAlertWithTitle("Error", message: "Could not schedule event - \(error.localizedDescription)", handler: nil)
+                    UIAlertController.displayAlertWithTitle("Error", message: "Could not schedule event - \(error.localizedDescription)",
+                        presentingViewController:self, okHandler: nil)
                 } else {
                     // Success - display the waiting screen
-                    self.displayAlertWithTitle("Success!", message: "We'll let you know when something's scheduled!  EventId: \(newEvent.objectId!)") {
+                    let message =  "We'll let you know when something's scheduled!  EventId: \(newEvent.objectId!)"
+                    UIAlertController.displayAlertWithTitle("Success!", message:message, presentingViewController: self) {
                         self.checkUserStatus()
                     }
                 }
