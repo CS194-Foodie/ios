@@ -28,6 +28,15 @@ class UserPreferences {
     var maxTravelDistance = 10
     var conversationPreferences:Set<String> = []
     
+    init() {
+        if let user = PFUser.currentUser() {
+            foodPreferences = Set<String>(user.objectForKey("foodPreferences") as! [String])
+            maxBudget = user.objectForKey("maxBudget") as! Int
+            maxTravelDistance = user.objectForKey("maxTravelDistance") as! Int
+            conversationPreferences = Set<String>(user.objectForKey("conversationPreferences") as! [String])
+        }
+    }
+    
     // Saves all four values to the current user object, and executes the passed-in block upon finishing.
     func saveInBackgroundWithBlock(block:PFBooleanResultBlock) {
         if let currUser = PFUser.currentUser() {

@@ -192,8 +192,6 @@
 				6A04E7051CF9BA6E00DF16D0 /* FoodieLocationManager.swift */,
 				6A04E7151CFA55DA00DF16D0 /* GrabABite Views */,
 				6A457E451CCA249F0044D43D /* Main.storyboard */,
-				6AF4F0681CEBDC0B00062387 /* LogIn.storyboard */,
-				6A630A161CF6E4FD00FD7DBA /* Onboarding.storyboard */,
 				6A3D24291CEBC5730028E2FF /* Resouces */,
 			);
 			path = Foodie;
@@ -220,6 +218,8 @@
 		6A630A1A1CF6EDA000FD7DBA /* Login/Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				6A630A161CF6E4FD00FD7DBA /* Onboarding.storyboard */,
+				6AF4F0681CEBDC0B00062387 /* LogIn.storyboard */,
 				6A3D241E1CEB29D40028E2FF /* LogInViewController.swift */,
 				6AF4F06B1CEBEC5000062387 /* WelcomeViewController.swift */,
 				6A630A231CF6EF2C00FD7DBA /* OnboardingViewController.swift */,
