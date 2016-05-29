@@ -28,8 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Initialize NSUserDefaults (stores server name and most recent RSVP decline)
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.registerDefaults([FoodieStringConstants.ParseServerNameKey: "Prod",
-            FoodieStringConstants.MostRecentRSVPNoKey: NSDate.distantPast()])
+            FoodieStringConstants.MostRecentRSVPNoKey: NSDate.distantPast(),
+            FoodieStringConstants.DoNotDisturbKey: false])
         defaults.synchronize()
+        
         let serverName = defaults.stringForKey(FoodieStringConstants.ParseServerNameKey)!
         
         let parseCredentialsDict:Dictionary<String, String> = NSDictionary(contentsOfFile: parseCredentialsPath)![serverName]! as! Dictionary<String, String>
@@ -117,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if userInfo["FoodieNotificationType"] as! String == "RSVP" {
             
             // Decline the RSVP automatically
-            if didDeclineRecentRSVP() || hasCalendarEventNow() {
+            if userIsBusy() {
                 let params:[NSObject:AnyObject] = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!,
                                                    "canGo": false, "eventId": userInfo["eventId"] as! String]
                 print("Automatically calling userRSVP with params: \(params)")
@@ -145,6 +147,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    /* Returns whether or not the user is unavailable */
+    func userIsBusy() -> Bool {
+        let recentlyDeclined = didDeclineRecentRSVP()
+        print("Recently declined? \(recentlyDeclined)")
+        let busyCalendar = hasCalendarEventNow()
+        print("Busy calendar? \(busyCalendar)")
+        let doNotDisturb = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.DoNotDisturbKey)
+        print("Do not disturb? \(doNotDisturb)")
+        
+        return recentlyDeclined || busyCalendar || doNotDisturb
+    }
+    
     /* Returns true if the user declined an RSVP within the last hour */
     func didDeclineRecentRSVP() -> Bool {
         let lastDeclineDate = NSUserDefaults.standardUserDefaults().objectForKey(FoodieStringConstants.MostRecentRSVPNoKey) as! NSDate
@@ -166,8 +180,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // 1 hour in the future
             let endDate = NSDate(timeInterval: 60.0 * 60, sinceDate: NSDate())
             
+            // Return whether there are any current non-all-day events
             let predicate = store.predicateForEventsWithStartDate(startDate, endDate: endDate, calendars: nil)
-            return store.eventsMatchingPredicate(predicate).count > 0
+            let events = store.eventsMatchingPredicate(predicate)
+            let nonAllDayEvents = events.filter { !$0.allDay }
+            return nonAllDayEvents.count > 0
         }
     }
     

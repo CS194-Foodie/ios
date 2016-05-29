@@ -7,10 +7,35 @@
 //
 
 import UIKit
+import Parse
 
+/* PROTOCOL: MealEventViewDelegate
+ * --------------------------------
+ * Protocol for a MealEvent view to communicate interactions back to its delegate.
+ * Currently empty.
+ * --------------------------------
+ */
+protocol MealEventViewDelegate:class {
+    
+}
+
+/* CLASS: MealEventView
+ * ---------------------
+ * View for displaying info about the user's confirmed event.  Currently
+ * only displays the eventId of the event.
+ * ---------------------
+ */
 class MealEventView: UIView {
 
+    // Outlets + views
     @IBOutlet var contentView:UIView!
+    @IBOutlet weak var eventIdLabel: UILabel!
+    
+    // The event we're displaying
+    var event: PFObject! = nil
+    
+    weak var delegate:MealEventViewDelegate?
+    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -22,11 +47,19 @@ class MealEventView: UIView {
         initSubviews()
     }
     
-    // Init views and yes/no buttons
+    init(frame: CGRect, event: PFObject) {
+        self.event = event
+        super.init(frame: frame)
+        initSubviews()
+    }
+    
     func initSubviews() {
         let nib = UINib(nibName: "MealEventView", bundle: nil)
         nib.instantiateWithOwner(self, options: nil)
         contentView.frame = bounds
+        
+        // Display our event's ID
+        self.eventIdLabel.text = "EventId = \(self.event.objectId!)"
         
         addSubview(contentView)
     }

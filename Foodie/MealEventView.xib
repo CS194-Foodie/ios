@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MealEventView" customModule="Foodie" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="5eS-Q7-ZhP"/>
+                <outlet property="eventIdLabel" destination="wv4-zj-RTK" id="vXd-KM-wiY"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -16,20 +17,25 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's eat!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="8IK-o1-iic">
-                    <rect key="frame" x="8" y="68" width="584" height="60"/>
+                    <rect key="frame" x="8" y="84" width="584" height="60"/>
                     <fontDescription key="fontDescription" type="system" pointSize="50"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="pne-RG-blX">
-                    <rect key="frame" x="180" y="136" width="240" height="128"/>
-                </mapView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EventId = bQet135" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wv4-zj-RTK">
+                    <rect key="frame" x="8" y="152" width="584" height="24"/>
+                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="8IK-o1-iic" secondAttribute="trailing" constant="8" id="3LP-95-xzW"/>
+                <constraint firstItem="wv4-zj-RTK" firstAttribute="top" secondItem="8IK-o1-iic" secondAttribute="bottom" constant="8" id="3be-Ad-4RH"/>
+                <constraint firstItem="wv4-zj-RTK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="LK2-DJ-0mt"/>
+                <constraint firstAttribute="trailing" secondItem="wv4-zj-RTK" secondAttribute="trailing" constant="8" id="sDX-XA-ilb"/>
                 <constraint firstItem="8IK-o1-iic" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="xCy-gF-86R"/>
-                <constraint firstItem="8IK-o1-iic" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="68" id="xWf-sc-EBY"/>
+                <constraint firstItem="8IK-o1-iic" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="84" id="xWf-sc-EBY"/>
             </constraints>
         </view>
     </objects>

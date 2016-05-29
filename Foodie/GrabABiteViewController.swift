@@ -40,7 +40,7 @@ import MBProgressHUD
  *          
  * --------------------------------
  */
-class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, MealRSVPViewDelegate {
+class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, MealRSVPViewDelegate, MealEventViewDelegate {
     
     var userView: UIView?
     var relevantEvent: PFObject?
@@ -107,7 +107,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         if status == "FREE" {
             
             // Load the Parse Config variable for max guests allowed
-            task = task.continueWithSuccessBlock { (task:BFTask) -> AnyObject? in
+            task = task.continueWithSuccessBlock { (_:BFTask) -> AnyObject? in
                 return PFConfig.getConfigInBackground()
             }.continueWithBlock { (task:BFTask) -> AnyObject? in
                 
@@ -134,7 +134,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
             
         } else if status == "WAITING" {
             
-            task.continueWithBlock { (task:BFTask) -> AnyObject? in
+            task.continueWithBlock { (_:BFTask) -> AnyObject? in
                 
                 self.relevantEvent = statusDict["event"] as? PFObject
                 
@@ -150,7 +150,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
             }
         } else if status == "INVITED" {
             
-            task.continueWithBlock { (task:BFTask) -> AnyObject? in
+            task.continueWithBlock { (_:BFTask) -> AnyObject? in
                 
                 self.relevantEvent = statusDict["event"] as? PFObject
                 
@@ -164,13 +164,34 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 
                 return nil
             }
-        } else {
-            //TODO: Finalized event
+        } else if status == "ATTENDING" {
             
+            task.continueWithBlock { (_:BFTask) -> AnyObject? in
+                
+                self.relevantEvent = statusDict["event"] as? PFObject
+                
+                // Add the event view
+                dispatch_async(dispatch_get_main_queue()) {
+                    let eventView = MealEventView(frame: self.view.frame, event: self.relevantEvent!)
+                    eventView.delegate = self
+                    self.userView = eventView
+                    self.view.addSubview(self.userView!)
+                }
+                
+                return nil
+            }
+        } else {
+            task.continueWithBlock { (_:BFTask) -> AnyObject? in
+                return BFTask(error: NSError(domain: "getUserStatusErrorUnknown", code: 3, userInfo: ["status": status]))
+            }
         }
         
         return task
     }
+    
+    
+    //MARK: MealEventViewDelegate
+    //TODO:
     
     
     //MARK: MealRSVPViewDelegate

@@ -38,6 +38,7 @@ class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var nameLabel:UILabel!
     @IBOutlet weak var serverSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var doNotDisturbSwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +52,9 @@ class SettingsTableViewController: UITableViewController {
         } else {
             serverSegmentedControl.selectedSegmentIndex = 1
         }
+        
+        // Display Do Not Disturb status
+        doNotDisturbSwitch.on = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.DoNotDisturbKey)
     }
 
     /* Detect when either the preferences or logout button is tapped */
@@ -119,5 +123,11 @@ class SettingsTableViewController: UITableViewController {
             UIAlertController.displayAlertWithTitle("Restart Required", message: "Please kill and relaunch the app to switch servers",
                                                     presentingViewController: self, okHandler: nil)
         }
+    }
+    
+    /* Triggered when the user turns Do Not Disturb on or off */
+    @IBAction func changeDoNotDisturb(sender:UISwitch) {
+        NSUserDefaults.standardUserDefaults().setBool(sender.on, forKey: FoodieStringConstants.DoNotDisturbKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
 }

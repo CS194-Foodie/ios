@@ -14,4 +14,5 @@ class FoodieStringConstants {
     static let RSVPNotificationCategory = "RSVP_CATEGORY"
     static let RSVPNotificationYesIdentifier = "YES_IDENTIFIER"
     static let RSVPNotificationNoIdentifier = "NO_IDENTIFIER"
+    static let DoNotDisturbKey = "DoNotDisturb"
 }

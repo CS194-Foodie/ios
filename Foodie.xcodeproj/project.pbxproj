@@ -142,9 +142,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6A04E7151CFA55DA00DF16D0 /* GrabABite Views */ = {
+		6A04E7151CFA55DA00DF16D0 /* GrabABite */ = {
 			isa = PBXGroup;
 			children = (
+				6A3D24261CEBC50B0028E2FF /* GrabABiteViewController.swift */,
 				6A04E7091CFA4A5700DF16D0 /* MealWaitingView.swift */,
 				6A04E70B1CFA4A6600DF16D0 /* MealWaitingView.xib */,
 				6AB3E5681CF863ED00A1A4B8 /* MealSchedulerView.swift */,
@@ -154,7 +155,7 @@
 				6A04E71A1CFA6B2500DF16D0 /* MealEventView.swift */,
 				6A04E71C1CFA6B2F00DF16D0 /* MealEventView.xib */,
 			);
-			name = "GrabABite Views";
+			name = GrabABite;
 			sourceTree = "<group>";
 		};
 		6A3D24291CEBC5730028E2FF /* Resouces */ = {
@@ -200,10 +201,9 @@
 				6A04E71E1CFAACF500DF16D0 /* FoodieStringConstants.swift */,
 				6A3D24231CEBC5010028E2FF /* SettingsTableViewController.swift */,
 				6A04E7201CFAB47E00DF16D0 /* UIAlertViewExtension.swift */,
-				6A3D24261CEBC50B0028E2FF /* GrabABiteViewController.swift */,
 				6A04E7051CF9BA6E00DF16D0 /* FoodieLocationManager.swift */,
-				6A04E7151CFA55DA00DF16D0 /* GrabABite Views */,
 				6A457E451CCA249F0044D43D /* Main.storyboard */,
+				6A04E7151CFA55DA00DF16D0 /* GrabABite */,
 				6A3D24291CEBC5730028E2FF /* Resouces */,
 			);
 			path = Foodie;
