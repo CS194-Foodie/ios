@@ -8,11 +8,21 @@
 
 import Foundation
 
+/* CLASS: FoodieStringConstants
+ * ------------------------------
+ * Class containing static constants for NSUserDefaults and
+ * push notifications keys.
+ * ------------------------------
+ */
 class FoodieStringConstants {
+    
+    // NSUserDefaults
     static let MostRecentRSVPNoKey = "MostRecentRSVP"
     static let ParseServerNameKey = "ServerName"
+    static let DoNotDisturbKey = "DoNotDisturb"
+    
+    // Push Notifications
     static let RSVPNotificationCategory = "RSVP_CATEGORY"
     static let RSVPNotificationYesIdentifier = "YES_IDENTIFIER"
     static let RSVPNotificationNoIdentifier = "NO_IDENTIFIER"
-    static let DoNotDisturbKey = "DoNotDisturb"
 }

@@ -40,8 +40,8 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var serverSegmentedControl: UISegmentedControl!
     @IBOutlet weak var doNotDisturbSwitch: UISwitch!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
         nameLabel.text = PFUser.currentUser()?.objectForKey("name") as? String
         
