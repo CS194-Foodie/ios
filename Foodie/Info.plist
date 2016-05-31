@@ -28,7 +28,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>3</string>
 	<key>FacebookAppID</key>
 	<string>1595556484090561</string>
 	<key>FacebookDisplayName</key>
@@ -47,6 +47,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We use your location to find awesome places for you to eat with friends.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Righteous-Regular.ttf</string>
@@ -69,7 +71,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We use your location to find awesome places for you to eat with friends.</string>
 </dict>
 </plist>
