@@ -139,7 +139,9 @@ class SettingsTableViewController: UITableViewController {
                     UIAlertController.displayAlertWithTitle("Error", message: "Could not log out: \(e.localizedDescription)", presentingViewController: self, okHandler: nil)
                 } else {
                     UIAlertController.displayAlertWithTitle("Restart Required", message: "Please kill and relaunch the app to switch servers",
-                    presentingViewController: self, okHandler: nil)
+                    presentingViewController: self) {
+                        self.logOut()
+                    }
                 }
             }
         }
