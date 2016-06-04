@@ -296,7 +296,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         newEvent.setObject([String](), forKey: "unavailableUsers")
         newEvent.setObject(false, forKey: "isComplete")
         newEvent.setObject(0, forKey: "cuisineIndex")
-        newEvent.setObject(PFUser.currentUser()!.objectId!, forKey: "creatorId")
+        newEvent.setObject(PFUser.currentUser()!, forKey: "creator")
         newEvent.setObject([String](), forKey: "cuisines")
         newEvent.setObject([String](), forKey: "invitedUsers")
         
