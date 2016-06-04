@@ -79,6 +79,8 @@ class SettingsTableViewController: UITableViewController {
                 print("Error: unknown index \(indexPath.row)")
             }
         }
+        
+        //TODO: Add switch for checking calendar access
     }
     
     /* Reenters the onboarding flow letting the user input their Foodie preferences */
@@ -114,6 +116,7 @@ class SettingsTableViewController: UITableViewController {
     
     /* Triggered when the user taps/changes the segmented control to switch servers */
     @IBAction func changeServer(sender:UISegmentedControl) {
+        //TODO: Logout
         let oldServerName = NSUserDefaults.standardUserDefaults().stringForKey(FoodieStringConstants.ParseServerNameKey)!
         let newServerName = sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)
         

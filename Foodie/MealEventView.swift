@@ -25,6 +25,7 @@ protocol MealEventViewDelegate:class {
  * only displays the eventId of the event.
  * ---------------------
  */
+//TODO: Finish
 class MealEventView: UIView {
 
     // Outlets + views

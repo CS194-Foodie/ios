@@ -29,6 +29,7 @@ class UserPreferences {
     var conversationPreferences:Set<String> = []
     
     init() {
+        //TODO: ensure these exist!
         if let user = PFUser.currentUser() {
             foodPreferences = Set<String>(user.objectForKey("foodPreferences") as! [String])
             maxBudget = user.objectForKey("maxBudget") as! Int

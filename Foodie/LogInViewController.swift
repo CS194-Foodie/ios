@@ -93,18 +93,32 @@ class LogInViewController: PFLogInViewController, PFLogInViewControllerDelegate 
                 let userInfo = result as! [String:String]
                 user.setObject(userInfo["name"]!, forKey: "name")
                 user.setObject(userInfo["id"]!, forKey: "facebookUserID")
-                
-                user.saveInBackgroundWithBlock({ (success:Bool, error:NSError?) in
-                    if let e = error {
+                user.saveInBackground().continueWithBlock { (task:BFTask) -> AnyObject? in
+
+                    if let e = task.error {
                         print("Error saving user's Facebook info: \(e.localizedDescription)")
-                    } else {
-                        
+                    }
+                    
+                    // Update the user's installation object
+                    PFInstallation.currentInstallation().setObject(user, forKey: "user")
+                    return PFInstallation.currentInstallation().saveInBackground()
+                    
+                }.continueWithBlock { (task:BFTask) -> AnyObject? in
+                    
+                    if let e = task.error {
+                        print("Error saving user's Installation info: \(e.localizedDescription)")
+                    }
+                    
+                    FoodieLocationManager.sharedInstance.uploadCurrentLocation()
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
                         // Go to the welcome screen
                         hud.hide(true)
-                        FoodieLocationManager.sharedInstance.uploadCurrentLocation()
                         self.performSegueWithIdentifier("welcome", sender: nil)
                     }
-                })
+                    
+                    return nil
+                }
             }
         }
     }
