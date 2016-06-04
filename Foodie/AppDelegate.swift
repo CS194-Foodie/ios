@@ -171,7 +171,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // If we don't have calendar access, or if they turned calendar check off, assume they're free
         if EKEventStore.authorizationStatusForEntityType(.Event) != .Authorized ||
-            NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.CheckCalendarKey) {
+            !NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.CheckCalendarKey) {
             return false
         } else {
             let store = EKEventStore()
