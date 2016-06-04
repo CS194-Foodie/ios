@@ -116,15 +116,26 @@ class SettingsTableViewController: UITableViewController {
     
     /* Triggered when the user taps/changes the segmented control to switch servers */
     @IBAction func changeServer(sender:UISegmentedControl) {
-        //TODO: Logout
         let oldServerName = NSUserDefaults.standardUserDefaults().stringForKey(FoodieStringConstants.ParseServerNameKey)!
         let newServerName = sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)
         
         if oldServerName != newServerName {
             NSUserDefaults.standardUserDefaults().setObject(newServerName, forKey: FoodieStringConstants.ParseServerNameKey)
             NSUserDefaults.standardUserDefaults().synchronize()
-            UIAlertController.displayAlertWithTitle("Restart Required", message: "Please kill and relaunch the app to switch servers",
-                                                    presentingViewController: self, okHandler: nil)
+            
+            PFUser.logOutInBackgroundWithBlock { (error:NSError?) in
+                if let e = error {
+                    
+                    // Revert to previous server
+                    NSUserDefaults.standardUserDefaults().setObject(oldServerName, forKey: FoodieStringConstants.ParseServerNameKey)
+                    NSUserDefaults.standardUserDefaults().synchronize()
+                    
+                    UIAlertController.displayAlertWithTitle("Error", message: "Could not log out: \(e.localizedDescription)", presentingViewController: self, okHandler: nil)
+                } else {
+                    UIAlertController.displayAlertWithTitle("Restart Required", message: "Please kill and relaunch the app to switch servers",
+                    presentingViewController: self, okHandler: nil)
+                }
+            }
         }
     }
     

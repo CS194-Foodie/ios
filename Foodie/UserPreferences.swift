@@ -29,12 +29,22 @@ class UserPreferences {
     var conversationPreferences:Set<String> = []
     
     init() {
-        //TODO: ensure these exist!
         if let user = PFUser.currentUser() {
-            foodPreferences = Set<String>(user.objectForKey("foodPreferences") as! [String])
-            maxBudget = user.objectForKey("maxBudget") as! Int
-            maxTravelDistance = user.objectForKey("maxTravelDistance") as! Int
-            conversationPreferences = Set<String>(user.objectForKey("conversationPreferences") as! [String])
+            if let foodPreferences = user.objectForKey("foodPreferences") as? [String] {
+                self.foodPreferences = Set<String>(foodPreferences)
+            }
+            
+            if let maxBudget = user.objectForKey("maxBudget") as? Int {
+                self.maxBudget = maxBudget
+            }
+            
+            if let maxTravelDistance = user.objectForKey("maxTravelDistance") as? Int {
+                self.maxTravelDistance = maxTravelDistance
+            }
+            
+            if let conversationPreferences = user.objectForKey("conversationPreferences") as? [String] {
+                self.conversationPreferences = Set<String>(conversationPreferences)
+            }
         }
     }
     
