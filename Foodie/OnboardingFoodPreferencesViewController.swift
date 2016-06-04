@@ -42,7 +42,7 @@ class OnboardingFoodPreferencesViewController: OnboardingPreferencesListViewCont
 
         // Do any additional setup after loading the view.
         cancelButton.hidden = !cancelButtonVisible
-        self.preferenceOptions = ["American", "Chinese", "Thai", "Mexican", "Indian", "Mediterranean", "Japanese", "Greek", "Italian"]
+        self.preferenceOptions = ["American", "Chinese", "Thai", "Mexican", "Indian", "Mediterranean", "Japanese", "Greek", "Italian", "Vegetarian", "Vegan"]
         self.selectedPreferences = self.userPreferences.foodPreferences
     }
     
