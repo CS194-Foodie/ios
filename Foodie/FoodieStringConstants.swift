@@ -20,6 +20,7 @@ class FoodieStringConstants {
     static let MostRecentRSVPNoKey = "MostRecentRSVP"
     static let ParseServerNameKey = "ServerName"
     static let DoNotDisturbKey = "DoNotDisturb"
+    static let CheckCalendarKey = "CheckCalendar"
     
     // Push Notifications
     static let RSVPNotificationCategory = "RSVP_CATEGORY"

@@ -19,6 +19,8 @@ import MBProgressHUD
  *              Row 1: user's name
  *              Row 2: app version
  *              Row 3: Segmented control to switch between Prod and Staging
+ *              Row 4: Switch to turn on or off calendar check 
+ *                      (checking calendar during RSVP process)
  *
  *      Other Settings:
  *              Row 1: Button to change Foodie preferences
@@ -39,6 +41,7 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var nameLabel:UILabel!
     @IBOutlet weak var serverSegmentedControl: UISegmentedControl!
     @IBOutlet weak var doNotDisturbSwitch: UISwitch!
+    @IBOutlet weak var calendarSwitch: UISwitch!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -55,6 +58,9 @@ class SettingsTableViewController: UITableViewController {
         
         // Display Do Not Disturb status
         doNotDisturbSwitch.on = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.DoNotDisturbKey)
+        
+        // Display calendar status
+        calendarSwitch.on = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.CheckCalendarKey)
     }
 
     /* Detect when either the preferences or logout button is tapped */
@@ -139,6 +145,11 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
+    /* Triggered when user turns Calendar check on or off */
+    @IBAction func changeCalendarPreferences(sender: UISwitch) {
+        NSUserDefaults.standardUserDefaults().setBool(sender.on, forKey: FoodieStringConstants.CheckCalendarKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
     /* Triggered when the user turns Do Not Disturb on or off */
     @IBAction func changeDoNotDisturb(sender:UISwitch) {
         NSUserDefaults.standardUserDefaults().setBool(sender.on, forKey: FoodieStringConstants.DoNotDisturbKey)

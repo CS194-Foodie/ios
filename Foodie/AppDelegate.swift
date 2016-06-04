@@ -29,7 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.registerDefaults([FoodieStringConstants.ParseServerNameKey: "Prod",
             FoodieStringConstants.MostRecentRSVPNoKey: NSDate.distantPast(),
-            FoodieStringConstants.DoNotDisturbKey: false])
+            FoodieStringConstants.DoNotDisturbKey: false,
+            FoodieStringConstants.CheckCalendarKey: true])
         defaults.synchronize()
         
         let serverName = defaults.stringForKey(FoodieStringConstants.ParseServerNameKey)!
@@ -168,8 +169,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /* Returns true is the user has a calendar event right now */
     func hasCalendarEventNow() -> Bool {
         
-        // If we don't have calendar access, assume they're free
-        if EKEventStore.authorizationStatusForEntityType(.Event) != .Authorized {
+        // If we don't have calendar access, or if they turned calendar check off, assume they're free
+        if EKEventStore.authorizationStatusForEntityType(.Event) != .Authorized ||
+            NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.CheckCalendarKey) {
             return false
         } else {
             let store = EKEventStore()
