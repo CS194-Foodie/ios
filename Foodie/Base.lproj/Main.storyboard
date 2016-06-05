@@ -272,6 +272,7 @@
                         <outlet property="doNotDisturbSwitch" destination="2Ki-ek-Q1T" id="uiN-Bu-D1z"/>
                         <outlet property="nameLabel" destination="OBN-vw-w6C" id="PrQ-XT-dJw"/>
                         <outlet property="serverSegmentedControl" destination="00w-FL-fZa" id="WwA-tG-1Ue"/>
+                        <outlet property="versionLabel" destination="D6l-De-eL4" id="M2h-AD-HUc"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Xz-Ma-0vK" userLabel="First Responder" sceneMemberID="firstResponder"/>

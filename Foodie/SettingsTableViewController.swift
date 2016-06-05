@@ -39,6 +39,7 @@ import MBProgressHUD
 class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var nameLabel:UILabel!
+    @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var serverSegmentedControl: UISegmentedControl!
     @IBOutlet weak var doNotDisturbSwitch: UISwitch!
     @IBOutlet weak var calendarSwitch: UISwitch!
@@ -55,6 +56,11 @@ class SettingsTableViewController: UITableViewController {
         } else {
             serverSegmentedControl.selectedSegmentIndex = 1
         }
+        
+        // Get the current app version info
+        let appVersionString = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
+        let buildNumber = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleVersion") as! String
+        versionLabel.text = "\(appVersionString) (\(buildNumber))"
         
         // Display Do Not Disturb status
         doNotDisturbSwitch.on = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.DoNotDisturbKey)
