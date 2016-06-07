@@ -10,6 +10,7 @@ import UIKit
 import Parse
 import ActionSheetPicker_3_0
 import MBProgressHUD
+import MapKit
 
 /* CLASS: GrabABiteViewController
  * --------------------------------
@@ -47,7 +48,8 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
 
     override func viewDidAppear(animated:Bool) {
         super.viewDidAppear(animated)
-
+        
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         checkUserStatus()
     }
     
@@ -71,19 +73,19 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
             print("getUserStatus response: \(resultsDict)")
             return self.displayViewForUserStatus(resultsDict)
             
-            }.continueWithBlock { (task:BFTask) -> AnyObject? in
+        }.continueWithBlock { (task:BFTask) -> AnyObject? in
                 
-                // On the main thread, stop the loading indicator and display an alert if needed
-                dispatch_async(dispatch_get_main_queue()) {
-                    hud.hide(true)
+            // On the main thread, stop the loading indicator and display an alert if needed
+            dispatch_async(dispatch_get_main_queue()) {
+                hud.hide(true)
                     
-                    if let e = task.error {
-                        UIAlertController.displayAlertWithTitle("Error", message: "Could not load view - \(e.localizedDescription)",
-                            presentingViewController:self, okHandler: nil)
-                    }
+                if let e = task.error {
+                    UIAlertController.displayAlertWithTitle("Error", message: "Could not load view - \(e.localizedDescription)",
+                        presentingViewController:self, okHandler: nil)
                 }
+            }
                 
-                return nil
+            return nil
         }
     }
     
@@ -168,11 +170,29 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
             
             task.continueWithBlock { (_:BFTask) -> AnyObject? in
                 
+                // Fetch all the people going
                 self.relevantEvent = statusDict["event"] as? PFObject
+                var guests = self.relevantEvent?.objectForKey("goingUsers") as! [PFUser]
+                guests.append(self.relevantEvent?.objectForKey("creator") as! PFUser)
+                return PFObject.fetchAllIfNeededInBackground(guests)
+                
+            }.continueWithSuccessBlock { (task:BFTask) -> AnyObject? in
+                
+                // Extract event info
+                let restaurantInfo = self.relevantEvent?.objectForKey("restaurantInfo") as! NSDictionary
+                let restaurantName = restaurantInfo["name"] as! String
+                let rating = restaurantInfo["rating"] as! Double
+                let lat = restaurantInfo["lat"] as! Double
+                let lon = restaurantInfo["lon"] as! Double
+                let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                
+                // Remove ourselves from the guest list
+                let guests = (task.result as! [PFUser]).filter { $0.objectId != PFUser.currentUser()?.objectId }
                 
                 // Add the event view
                 dispatch_async(dispatch_get_main_queue()) {
-                    let eventView = MealEventView(frame: self.view.frame, event: self.relevantEvent!)
+                    let eventView = MealEventView(frame: self.view.frame, withRestaurantName: restaurantName,
+                        rating: rating, withCoordinates:coordinates, withGuests: guests)
                     eventView.delegate = self
                     self.userView = eventView
                     self.view.addSubview(self.userView!)
@@ -191,7 +211,23 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
     
     
     //MARK: MealEventViewDelegate
-    //TODO:
+    
+    func mealEventView(mealEventView: MealEventView, mapTappedForCoordinates coordinates:CLLocationCoordinate2D) {
+        let item = MKMapItem(placemark: MKPlacemark(coordinate: coordinates, addressDictionary: nil))
+        item.openInMapsWithLaunchOptions([MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving])
+    }
+    
+    func mealEventViewYelpButtonTapped(mealEventView: MealEventView) {
+        let restaurantInfo = self.relevantEvent?.objectForKey("restaurantInfo") as! NSDictionary
+        let restaurantId = restaurantInfo["id"] as! String
+        
+        let yelpInstalled = UIApplication.sharedApplication().canOpenURL(NSURL(string: "yelp://")!)
+        if yelpInstalled {
+            UIApplication.sharedApplication().openURL(NSURL(string: "yelp:///biz/\(restaurantId)")!)
+        } else {
+            UIApplication.sharedApplication().openURL(NSURL(string:"http://yelp.com/biz/\(restaurantId)")!)
+        }
+    }
     
     
     //MARK: MealRSVPViewDelegate

@@ -32,6 +32,8 @@
 		6A457E571CCA249F0044D43D /* FoodieTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A457E561CCA249F0044D43D /* FoodieTests.swift */; };
 		6A457E621CCA249F0044D43D /* FoodieUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A457E611CCA249F0044D43D /* FoodieUITests.swift */; };
 		6A457E701CCA28D70044D43D /* ParseCredentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A457E6F1CCA28D70044D43D /* ParseCredentials.plist */; };
+		6A5971CC1D0691CE00C28DAF /* GuestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5971CA1D0691CE00C28DAF /* GuestTableViewCell.swift */; };
+		6A5971CD1D0691CE00C28DAF /* GuestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A5971CB1D0691CE00C28DAF /* GuestTableViewCell.xib */; };
 		6A630A171CF6E4FD00FD7DBA /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A630A161CF6E4FD00FD7DBA /* Onboarding.storyboard */; };
 		6A630A1C1CF6EDBA00FD7DBA /* OnboardingFoodPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A630A1B1CF6EDBA00FD7DBA /* OnboardingFoodPreferencesViewController.swift */; };
 		6A630A1E1CF6EDCC00FD7DBA /* OnboardingMaxBudgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A630A1D1CF6EDCC00FD7DBA /* OnboardingMaxBudgetViewController.swift */; };
@@ -95,6 +97,8 @@
 		6A457E611CCA249F0044D43D /* FoodieUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodieUITests.swift; sourceTree = "<group>"; };
 		6A457E631CCA249F0044D43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A457E6F1CCA28D70044D43D /* ParseCredentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ParseCredentials.plist; sourceTree = "<group>"; };
+		6A5971CA1D0691CE00C28DAF /* GuestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuestTableViewCell.swift; sourceTree = "<group>"; };
+		6A5971CB1D0691CE00C28DAF /* GuestTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GuestTableViewCell.xib; sourceTree = "<group>"; };
 		6A630A161CF6E4FD00FD7DBA /* Onboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Onboarding.storyboard; sourceTree = "<group>"; };
 		6A630A1B1CF6EDBA00FD7DBA /* OnboardingFoodPreferencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingFoodPreferencesViewController.swift; sourceTree = "<group>"; };
 		6A630A1D1CF6EDCC00FD7DBA /* OnboardingMaxBudgetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingMaxBudgetViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +158,8 @@
 				6A04E7181CFA567600DF16D0 /* MealRSVPView.xib */,
 				6A04E71A1CFA6B2500DF16D0 /* MealEventView.swift */,
 				6A04E71C1CFA6B2F00DF16D0 /* MealEventView.xib */,
+				6A5971CA1D0691CE00C28DAF /* GuestTableViewCell.swift */,
+				6A5971CB1D0691CE00C28DAF /* GuestTableViewCell.xib */,
 			);
 			name = GrabABite;
 			sourceTree = "<group>";
@@ -395,6 +401,7 @@
 				6A3D24211CEBBCC10028E2FF /* Righteous-Regular.ttf in Resources */,
 				6A457E491CCA249F0044D43D /* Assets.xcassets in Resources */,
 				6A630A171CF6E4FD00FD7DBA /* Onboarding.storyboard in Resources */,
+				6A5971CD1D0691CE00C28DAF /* GuestTableViewCell.xib in Resources */,
 				6AF4F06A1CEBDC0B00062387 /* LogIn.storyboard in Resources */,
 				6A04E7141CFA506300DF16D0 /* pacman.gif in Resources */,
 				6AB3E56B1CF8642E00A1A4B8 /* MealSchedulerView.xib in Resources */,
@@ -559,6 +566,7 @@
 				6A04E70A1CFA4A5700DF16D0 /* MealWaitingView.swift in Sources */,
 				6A630A221CF6EDE200FD7DBA /* OnboardingConversationPreferencesViewController.swift in Sources */,
 				6AB3E5691CF863ED00A1A4B8 /* MealSchedulerView.swift in Sources */,
+				6A5971CC1D0691CE00C28DAF /* GuestTableViewCell.swift in Sources */,
 				6A630A1C1CF6EDBA00FD7DBA /* OnboardingFoodPreferencesViewController.swift in Sources */,
 				6A04E7061CF9BA6E00DF16D0 /* FoodieLocationManager.swift in Sources */,
 				6A630A1E1CF6EDCC00FD7DBA /* OnboardingMaxBudgetViewController.swift in Sources */,
