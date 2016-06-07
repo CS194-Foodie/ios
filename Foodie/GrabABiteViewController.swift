@@ -221,7 +221,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         let restaurantInfo = self.relevantEvent?.objectForKey("restaurantInfo") as! NSDictionary
         let restaurantId = restaurantInfo["id"] as! String
         
-        let yelpInstalled = UIApplication.sharedApplication().canOpenURL(NSURL(string: "yelp://")!)
+        let yelpInstalled = UIApplication.sharedApplication().canOpenURL(NSURL(string: "yelp:")!)
         if yelpInstalled {
             UIApplication.sharedApplication().openURL(NSURL(string: "yelp:///biz/\(restaurantId)")!)
         } else {
