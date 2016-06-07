@@ -108,14 +108,6 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         var task = BFTask(result: nil)
         let status = statusDict["status"] as! String
         
-        // Remove the previous view
-        if let oldView = userView {
-            dispatch_async(dispatch_get_main_queue()) {
-                oldView.removeFromSuperview()
-            }
-            userView = nil
-        }
-        
         if status == "FREE" {
             
             // Load the Parse Config variable for max guests allowed
@@ -134,6 +126,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                     
                     // Add the scheduler view so the user can schedule events
                     dispatch_async(dispatch_get_main_queue()) {
+                        self.userView?.removeFromSuperview()
                         let schedulerView = MealSchedulerView(frame: self.view.frame, maxNumGuests: config["MAX_NUM_GUESTS"] as! Int)
                         schedulerView.delegate = self
                         self.userView = schedulerView
@@ -152,6 +145,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 
                 // Add the waiting view
                 dispatch_async(dispatch_get_main_queue()) {
+                    self.userView?.removeFromSuperview()
                     let waitingView = MealWaitingView(frame: self.view.frame)
                     self.userView = waitingView
                     self.view.addSubview(self.userView!)
@@ -168,6 +162,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 
                 // Add the RSVP view
                 dispatch_async(dispatch_get_main_queue()) {
+                    self.userView?.removeFromSuperview()
                     let rsvpView = MealRSVPView(frame: self.view.frame)
                     rsvpView.delegate = self
                     self.userView = rsvpView
@@ -201,6 +196,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 
                 // Add the event view
                 dispatch_async(dispatch_get_main_queue()) {
+                    self.userView?.removeFromSuperview()
                     let eventView = MealEventView(frame: self.view.frame, withRestaurantName: restaurantName,
                         rating: rating, withCoordinates:coordinates, withGuests: guests)
                     eventView.delegate = self
