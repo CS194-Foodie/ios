@@ -142,9 +142,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 notif.userInfo = userInfo
                 application.presentLocalNotificationNow(notif)
                 
+                let nsnotif = NSNotification(name: FoodieStringConstants.NSNotificationRSVP, object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(nsnotif)
+                
                 completionHandler(.NewData)
             }
 
+        } else {
+            let notif = NSNotification(name: FoodieStringConstants.NSNotificationMessage, object: nil)
+            NSNotificationCenter.defaultCenter().postNotification(notif)
         }
     }
     

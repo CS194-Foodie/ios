@@ -12,7 +12,6 @@ target 'Foodie' do
 	pod 'ParseUI'
 	pod 'MBProgressHUD', '~> 0.9.2'
 	pod 'ActionSheetPicker-3.0'
-	pod 'ParseLiveQuery'
 	pod 'SwiftGifOrigin'
 	pod 'HCSStarRatingView'
 end

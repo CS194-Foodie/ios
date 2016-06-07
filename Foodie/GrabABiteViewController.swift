@@ -50,6 +50,11 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         super.viewDidAppear(animated)
         
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GrabABiteViewController.handleNotification),
+                                                         name: FoodieStringConstants.NSNotificationRSVP, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GrabABiteViewController.handleNotification),
+                                                         name: FoodieStringConstants.NSNotificationMessage, object: nil)
         checkUserStatus()
     }
     
@@ -58,6 +63,10 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         self.userView?.removeFromSuperview()
         self.relevantEvent = nil
         MBProgressHUD.hideAllHUDsForView(self.tabBarController?.view, animated: true)
+    }
+    
+    func handleNotification(notification:NSNotification) {
+        self.checkUserStatus()
     }
     
     // Get the status of this user (busy, free, etc.) since the screen we
