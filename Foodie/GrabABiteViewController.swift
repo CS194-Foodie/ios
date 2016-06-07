@@ -11,6 +11,7 @@ import Parse
 import ActionSheetPicker_3_0
 import MBProgressHUD
 import MapKit
+import Contacts
 
 /* CLASS: GrabABiteViewController
  * --------------------------------
@@ -222,7 +223,11 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
     //MARK: MealEventViewDelegate
     
     func mealEventView(mealEventView: MealEventView, mapTappedForCoordinates coordinates:CLLocationCoordinate2D) {
-        let item = MKMapItem(placemark: MKPlacemark(coordinate: coordinates, addressDictionary: nil))
+        let restaurantInfo = self.relevantEvent?.objectForKey("restaurantInfo") as! NSDictionary
+        let displayAddress = restaurantInfo["display_address"] as! [String]
+        print(displayAddress)
+        
+        let item = MKMapItem(placemark: MKPlacemark(coordinate: coordinates, addressDictionary: [String(CNPostalAddressStreetKey):displayAddress[0]]))
         item.openInMapsWithLaunchOptions([MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving])
     }
     
