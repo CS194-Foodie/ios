@@ -46,7 +46,7 @@ class MealSchedulerView: UIView {
     
     // (24 hour clock)
     let breakfastCutoffHour = 11 // 11AM
-    let lunchCutoffHour = 16 // 4PM
+    let lunchCutoffHour = 15 // 4PM cutoff
 
     @IBOutlet var contentView: UIView!
     @IBOutlet weak var mealLabel: UILabel!
