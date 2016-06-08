@@ -28,7 +28,7 @@ class GuestTableViewCell: UITableViewCell {
         profilePictureView.profileID = user.objectForKey("facebookUserID") as! String
         nameLabel.text = user.objectForKey("name") as? String
         profilePictureView.pictureMode = .Square
-        profilePictureView.layer.cornerRadius = profilePictureView.frame.size.width / 2.0
+        profilePictureView.layer.cornerRadius = (frame.size.height - 15.0) / 2.0
         profilePictureView.clipsToBounds = true
         profilePictureView.setNeedsImageUpdate()
     }

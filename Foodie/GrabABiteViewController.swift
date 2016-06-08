@@ -235,6 +235,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                     eventView.delegate = self
                     self.userView = eventView
                     self.view.addSubview(self.userView!)
+                    (self.userView as! MealEventView).initTableView()
                 }
                 
                 return nil

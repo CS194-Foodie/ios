@@ -55,7 +55,7 @@
                     </connections>
                 </button>
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="5Qo-wH-r8o">
-                    <rect key="frame" x="8" y="186" width="584" height="163"/>
+                    <rect key="frame" x="8" y="186" width="584" height="161.5"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="216" id="QEB-gM-EMO"/>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="216" id="xZL-xl-aJK"/>
@@ -67,20 +67,14 @@
                         </mask>
                     </variation>
                 </mapView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You're going with:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxM-4R-mbV">
-                    <rect key="frame" x="223" y="357" width="154.5" height="24"/>
-                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Naq-zV-cFp">
-                    <rect key="frame" x="8" y="186" width="584" height="163"/>
+                    <rect key="frame" x="8" y="186" width="584" height="161.5"/>
                     <connections>
                         <action selector="mapTapped:" destination="-1" eventType="touchUpInside" id="ees-E0-uHk"/>
                     </connections>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" alwaysBounceVertical="YES" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="55" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="b26-Vb-C6y">
-                    <rect key="frame" x="50" y="381" width="500" height="163"/>
+                    <rect key="frame" x="50" y="383" width="500" height="161"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="300" id="IxT-1e-pkR"/>
@@ -97,6 +91,12 @@
                         <outlet property="delegate" destination="-1" id="uUr-ee-vyi"/>
                     </connections>
                 </tableView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You're going with:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxM-4R-mbV">
+                    <rect key="frame" x="212" y="355.5" width="176.5" height="27.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="23"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -137,9 +137,9 @@
                 <mask key="constraints">
                     <exclude reference="dok-Ra-g2r"/>
                     <exclude reference="hMD-fe-6xN"/>
-                    <exclude reference="OXV-3j-9mt"/>
                     <exclude reference="bTa-h6-tjh"/>
                     <exclude reference="jsf-kp-2qS"/>
+                    <exclude reference="OXV-3j-9mt"/>
                 </mask>
             </variation>
         </view>

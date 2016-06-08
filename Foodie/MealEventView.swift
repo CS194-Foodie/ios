@@ -89,11 +89,18 @@ class MealEventView: UIView, UITableViewDataSource, UITableViewDelegate {
         let region = MKCoordinateRegionMakeWithDistance(coordinates, 500, 500)
         mapView.setRegion(region, animated: true)
         
-        // Guests Table View
+        addSubview(contentView)
+    }
+    
+    func initTableView() {
         let cellNib = UINib(nibName: "GuestTableViewCell", bundle: nil)
         guestsTableView.registerNib(cellNib, forCellReuseIdentifier: "GuestCell")
         
-        addSubview(contentView)
+        if self.contentView.frame.height > 480.0 {
+            guestsTableView.rowHeight = 75
+        } else {
+            guestsTableView.rowHeight = 52
+        }
     }
     
     
@@ -114,6 +121,7 @@ class MealEventView: UIView, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("GuestCell", forIndexPath: indexPath) as! GuestTableViewCell
+        print(tableView.rowHeight)
         cell.bindToUser(guestsGoing[indexPath.row])
         return cell
     }
