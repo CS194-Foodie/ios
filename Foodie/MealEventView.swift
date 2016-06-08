@@ -121,7 +121,6 @@ class MealEventView: UIView, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("GuestCell", forIndexPath: indexPath) as! GuestTableViewCell
-        print(tableView.rowHeight)
         cell.bindToUser(guestsGoing[indexPath.row])
         return cell
     }

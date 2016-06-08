@@ -255,7 +255,6 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
     func mealEventView(mealEventView: MealEventView, mapTappedForCoordinates coordinates:CLLocationCoordinate2D) {
         let restaurantInfo = self.relevantEvent?.objectForKey("restaurantInfo") as! NSDictionary
         let displayAddress = restaurantInfo["display_address"] as! [String]
-        print(displayAddress)
         
         let item = MKMapItem(placemark: MKPlacemark(coordinate: coordinates, addressDictionary: [String(CNPostalAddressStreetKey):displayAddress[0]]))
         item.openInMapsWithLaunchOptions([MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving])
