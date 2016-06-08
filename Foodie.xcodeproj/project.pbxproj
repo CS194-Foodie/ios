@@ -41,6 +41,7 @@
 		6A630A221CF6EDE200FD7DBA /* OnboardingConversationPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A630A211CF6EDE200FD7DBA /* OnboardingConversationPreferencesViewController.swift */; };
 		6A630A241CF6EF2C00FD7DBA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A630A231CF6EF2C00FD7DBA /* OnboardingViewController.swift */; };
 		6A630A2C1CF7051100FD7DBA /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A630A2B1CF7051100FD7DBA /* UserPreferences.swift */; };
+		6A6311C41D07E6F90084E6C3 /* Stanford.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 6A6311C31D07E6F90084E6C3 /* Stanford.gpx */; };
 		6AB3E5691CF863ED00A1A4B8 /* MealSchedulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB3E5681CF863ED00A1A4B8 /* MealSchedulerView.swift */; };
 		6AB3E56B1CF8642E00A1A4B8 /* MealSchedulerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AB3E56A1CF8642E00A1A4B8 /* MealSchedulerView.xib */; };
 		6AF4F06A1CEBDC0B00062387 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AF4F0681CEBDC0B00062387 /* LogIn.storyboard */; };
@@ -106,6 +107,7 @@
 		6A630A211CF6EDE200FD7DBA /* OnboardingConversationPreferencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingConversationPreferencesViewController.swift; sourceTree = "<group>"; };
 		6A630A231CF6EF2C00FD7DBA /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		6A630A2B1CF7051100FD7DBA /* UserPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+		6A6311C31D07E6F90084E6C3 /* Stanford.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Stanford.gpx; sourceTree = "<group>"; };
 		6AB3E5681CF863ED00A1A4B8 /* MealSchedulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MealSchedulerView.swift; sourceTree = "<group>"; };
 		6AB3E56A1CF8642E00A1A4B8 /* MealSchedulerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MealSchedulerView.xib; sourceTree = "<group>"; };
 		6AF4F0691CEBDC0B00062387 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LogIn.storyboard; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 		6A3D24291CEBC5730028E2FF /* Resouces */ = {
 			isa = PBXGroup;
 			children = (
+				6A6311C31D07E6F90084E6C3 /* Stanford.gpx */,
 				6A457E4D1CCA249F0044D43D /* Info.plist */,
 				6A3D24201CEBBCC10028E2FF /* Righteous-Regular.ttf */,
 				6A04E7131CFA506300DF16D0 /* pacman.gif */,
@@ -396,6 +399,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A04E7191CFA567600DF16D0 /* MealRSVPView.xib in Resources */,
+				6A6311C41D07E6F90084E6C3 /* Stanford.gpx in Resources */,
 				6A457E4C1CCA249F0044D43D /* LaunchScreen.storyboard in Resources */,
 				6A457E701CCA28D70044D43D /* ParseCredentials.plist in Resources */,
 				6A3D24211CEBBCC10028E2FF /* Righteous-Regular.ttf in Resources */,

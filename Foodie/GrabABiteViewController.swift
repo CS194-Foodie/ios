@@ -63,6 +63,7 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         super.viewDidDisappear(animated)
         self.userView?.removeFromSuperview()
         self.relevantEvent = nil
+        self.tabBarController?.navigationItem.rightBarButtonItem = nil
         MBProgressHUD.hideAllHUDsForView(self.tabBarController?.view, animated: true)
     }
     
@@ -80,7 +81,8 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
         PFCloud.callFunctionInBackground("getUserStatus", withParameters: params).continueWithSuccessBlock { (task:BFTask) -> AnyObject? in
             
             let resultsDict = task.result as! NSDictionary
-            print("getUserStatus response: \(resultsDict)")
+            let status = resultsDict["status"] as! String
+            print("getUserStatus response: \(status)")
             return self.displayViewForUserStatus(resultsDict)
             
         }.continueWithBlock { (task:BFTask) -> AnyObject? in
@@ -92,10 +94,39 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
                 if let e = task.error {
                     UIAlertController.displayAlertWithTitle("Error", message: "Could not load view - \(e.localizedDescription)",
                         presentingViewController:self, okHandler: nil)
+                    
+                // If the user has an event they planned (either they're going to or waiting on),
+                // let them cancel it
+                } else if let event = self.relevantEvent where (event.objectForKey("creator") as! PFUser).objectId == PFUser.currentUser()!.objectId! {
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "I Can't Go", style: .Plain, target: self, action: #selector(GrabABiteViewController.cancelEvent))
+                    }
+                    
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.tabBarController?.navigationItem.rightBarButtonItem = nil
+                    }
                 }
             }
                 
             return nil
+        }
+    }
+    
+    /* Cancels the current event, and notifies all users going besides this one */
+    func cancelEvent() {
+        let params = ["sessionToken": (PFUser.currentUser()?.sessionToken!)!, "eventId": relevantEvent!.objectId!]
+        PFCloud.callFunctionInBackground("cancelEvent", withParameters: params) { (_:AnyObject?, error:NSError?) in
+            if let e = error {
+                dispatch_async(dispatch_get_main_queue()) {
+                    UIAlertController.displayAlertWithTitle("Error", message: "Could not cancel event - \(e)", presentingViewController: self, okHandler: nil)
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.checkUserStatus()
+                }
+            }
         }
     }
     
@@ -114,7 +145,9 @@ class GrabABiteViewController: UIViewController, MealSchedulerViewDelegate, Meal
             task = task.continueWithSuccessBlock { (_:BFTask) -> AnyObject? in
                 return PFConfig.getConfigInBackground()
             }.continueWithBlock { (task:BFTask) -> AnyObject? in
-                
+
+                self.relevantEvent = nil
+
                 if let e = task.error {
                     dispatch_async(dispatch_get_main_queue()) {
                         UIAlertController.displayAlertWithTitle("Error",
