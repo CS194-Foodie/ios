@@ -19,8 +19,7 @@ import MBProgressHUD
  *              Row 1: user's name
  *              Row 2: app version
  *              Row 3: Segmented control to switch between Prod and Staging
- *              Row 4: Switch to turn on or off calendar check 
- *                      (checking calendar during RSVP process)
+ *              Row 4: Switch to turn on or off auto-decline RSVP
  *
  *      Other Settings:
  *              Row 1: Button to change Foodie preferences
@@ -42,7 +41,7 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var serverSegmentedControl: UISegmentedControl!
     @IBOutlet weak var doNotDisturbSwitch: UISwitch!
-    @IBOutlet weak var calendarSwitch: UISwitch!
+    @IBOutlet weak var autoDeclineSwitch: UISwitch!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -65,8 +64,8 @@ class SettingsTableViewController: UITableViewController {
         // Display Do Not Disturb status
         doNotDisturbSwitch.on = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.DoNotDisturbKey)
         
-        // Display calendar status
-        calendarSwitch.on = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.CheckCalendarKey)
+        // Display auto-decline status
+        autoDeclineSwitch.on = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.AutoDeclineKey)
     }
 
     /* Detect when either the preferences or logout button is tapped */
@@ -153,9 +152,9 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
-    /* Triggered when user turns Calendar check on or off */
-    @IBAction func changeCalendarPreferences(sender: UISwitch) {
-        NSUserDefaults.standardUserDefaults().setBool(sender.on, forKey: FoodieStringConstants.CheckCalendarKey)
+    /* Triggered when user turns auto-decline on or off */
+    @IBAction func changeAutoDeclinePreferences(sender: UISwitch) {
+        NSUserDefaults.standardUserDefaults().setBool(sender.on, forKey: FoodieStringConstants.AutoDeclineKey)
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     /* Triggered when the user turns Do Not Disturb on or off */

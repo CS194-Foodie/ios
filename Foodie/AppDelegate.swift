@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         defaults.registerDefaults([FoodieStringConstants.ParseServerNameKey: "Prod",
             FoodieStringConstants.MostRecentRSVPNoKey: NSDate.distantPast(),
             FoodieStringConstants.DoNotDisturbKey: false,
-            FoodieStringConstants.CheckCalendarKey: true])
+            FoodieStringConstants.AutoDeclineKey: true])
         defaults.synchronize()
         
         let serverName = defaults.stringForKey(FoodieStringConstants.ParseServerNameKey)!
@@ -163,7 +163,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let doNotDisturb = NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.DoNotDisturbKey)
         print("Do not disturb? \(doNotDisturb)")
         
-        return recentlyDeclined || busyCalendar || doNotDisturb
+        if NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.AutoDeclineKey) {
+            return recentlyDeclined || busyCalendar || doNotDisturb
+        } else {
+            return false
+        }
     }
     
     /* Returns true if the user declined an RSVP within the last hour */
@@ -175,9 +179,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /* Returns true is the user has a calendar event right now */
     func hasCalendarEventNow() -> Bool {
         
-        // If we don't have calendar access, or if they turned calendar check off, assume they're free
-        if EKEventStore.authorizationStatusForEntityType(.Event) != .Authorized ||
-            !NSUserDefaults.standardUserDefaults().boolForKey(FoodieStringConstants.CheckCalendarKey) {
+        // If we don't have calendar access, assume they're free
+        if EKEventStore.authorizationStatusForEntityType(.Event) != .Authorized {
             return false
         } else {
             let store = EKEventStore()
